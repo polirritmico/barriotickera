@@ -16,31 +16,29 @@
    programa cliente (Python), que hace commit o rollback.
    ===================================================================== */
 
-CREATE OR REPLACE PACKAGE pkg_paciente AS
+CREATE OR REPLACE PACKAGE pkg_entrada AS
 
-    -- Utilidad: calcula el DV de un RUN chileno (modulo 11)
-    FUNCTION fn_calcular_dv (p_run IN NUMBER) RETURN VARCHAR2;
+    -- Utilidad: verificación básica del formato correo. 0 ok, 1 fallo
+    FUNCTION fn_revisar_formato_correo (p_correo IN VARCHAR2) RETURN NUMBER;
 
-    -- Utilidad: 1 si existe el paciente, 0 si no
-    FUNCTION fn_existe (p_run IN paciente.pac_run%TYPE) RETURN NUMBER;
+    -- Utilidad: 0 si existe el paciente, 1 si no
+    FUNCTION fn_existe (p_id_entrada IN entrada.id_entrada%TYPE) RETURN NUMBER;
 
-    -- C: Create
+    -- C: Create TODO: Qué es sp (original sp_insertar)
     PROCEDURE sp_insertar (
-        p_run        IN paciente.pac_run%TYPE,
-        p_dv         IN paciente.dv_run%TYPE,
-        p_pnombre    IN paciente.pnombre%TYPE,
-        p_snombre    IN paciente.snombre%TYPE,
-        p_apaterno   IN paciente.apaterno%TYPE,
-        p_amaterno   IN paciente.amaterno%TYPE,
-        p_fecha_nac  IN paciente.fecha_nacimiento%TYPE,
-        p_telefono   IN paciente.telefono%TYPE,
-        p_sal_id     IN paciente.sal_id%TYPE
+        p_id IN entrada.id_entrada%TYPE,
+        p_ubicacion IN entrada.ubicacion%TYPE,
+        p_qr IN entrada.qr%TYPE,
+        p_id_tipo_entrada IN entrada.id_tipo_entrada%TYPE,
+        p_id_evento IN entrada.id_evento%TYPE,
+        p_id_venta_entrada IN entrada.id_venta_entrada%TYPE,
+        p_id_estado_entrada IN entrada.id_estado_entrada%TYPE,
     );
 
-    -- R: Read (un paciente)
+    -- R: Read (una entrada)
     PROCEDURE sp_obtener (
-        p_run     IN  paciente.pac_run%TYPE,
-        p_cursor  OUT SYS_REFCURSOR
+        p_id     IN  entrada.id%TYPE,
+        p_cursor OUT SYS_REFCURSOR
     );
 
     -- R: Read (listado, filtro opcional por nombre o apellido)
@@ -49,25 +47,24 @@ CREATE OR REPLACE PACKAGE pkg_paciente AS
         p_cursor  OUT SYS_REFCURSOR
     );
 
-    -- U: Update (el RUN y DV no se modifican porque son la PK)
+    -- U: Update (la id no se modifica porque es la PK)
     PROCEDURE sp_actualizar (
-        p_run        IN paciente.pac_run%TYPE,
-        p_pnombre    IN paciente.pnombre%TYPE,
-        p_snombre    IN paciente.snombre%TYPE,
-        p_apaterno   IN paciente.apaterno%TYPE,
-        p_amaterno   IN paciente.amaterno%TYPE,
-        p_fecha_nac  IN paciente.fecha_nacimiento%TYPE,
-        p_telefono   IN paciente.telefono%TYPE,
-        p_sal_id     IN paciente.sal_id%TYPE
+        p_id IN entrada.id_entrada%TYPE,
+        p_ubicacion IN entrada.ubicacion%TYPE,
+        p_qr IN entrada.qr%TYPE,
+        p_id_tipo_entrada IN entrada.id_tipo_entrada%TYPE,
+        p_id_evento IN entrada.id_evento%TYPE,
+        p_id_venta_entrada IN entrada.id_venta_entrada%TYPE,
+        p_id_estado_entrada IN entrada.id_estado_entrada%TYPE,
     );
 
     -- D: Delete
-    PROCEDURE sp_eliminar (p_run IN paciente.pac_run%TYPE);
+    PROCEDURE sp_eliminar (p_id IN entrada.id_entrada%TYPE);
 
-END pkg_paciente;
+END pkg_entrada;
 /
 
-CREATE OR REPLACE PACKAGE BODY pkg_paciente AS
+CREATE OR REPLACE PACKAGE BODY pkg_entrada AS
 
     -- Excepciones de Oracle asociadas a restricciones
     e_fk_padre_no_existe EXCEPTION;   -- ORA-02291
@@ -302,13 +299,13 @@ CREATE OR REPLACE PACKAGE BODY pkg_paciente AS
                 ': tiene registros asociados');
     END sp_eliminar;
 
-END pkg_paciente;
+END pkg_entrada;
 /
 
 -- ---------------------------------------------------------------------
 -- Pruebas rapidas desde SQL Developer
 -- ---------------------------------------------------------------------
-SHOW ERRORS PACKAGE BODY pkg_paciente;
+SHOW ERRORS PACKAGE BODY pkg_entrada;
 
-SELECT pkg_paciente.fn_calcular_dv(6215470) AS dv_esperado_5 FROM dual;
-SELECT pkg_paciente.fn_existe(6215470)      AS existe        FROM dual;
+SELECT pkg_entrada.fn_calcular_dv(6215470) AS dv_esperado_5 FROM dual;
+SELECT pkg_entrada.fn_existe(6215470)      AS existe        FROM dual;
