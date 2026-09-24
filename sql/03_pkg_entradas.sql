@@ -4,12 +4,14 @@
    -20002: QR obligatorio
    -20003: Referencia inexistente / FK inválida
    -20004: Entrada no encontrada
+   -20005: No se puede eliminar: tiene consumos asociados
    -20999: Error inesperado
 
    Procedimientos:
    - crear_entrada
    - actualizar_entrada
    - listar_entradas (filtro opcional; NULL = todas)
+   - eliminar_entrada
    */
 
 CREATE OR REPLACE PACKAGE pkg_entradas AS
@@ -42,6 +44,9 @@ CREATE OR REPLACE PACKAGE pkg_entradas AS
         p_cursor OUT SYS_REFCURSOR
     );
 
+    -- D: Delete
+    PROCEDURE eliminar_entrada (p_id_entrada IN entradas.id_entrada%TYPE);
+
 END pkg_entradas;
 /
 
@@ -49,6 +54,9 @@ CREATE OR REPLACE PACKAGE BODY pkg_entradas AS
 
     e_fk_no_encontrada EXCEPTION;
     PRAGMA EXCEPTION_INIT(e_fk_no_encontrada, -2291);
+
+    e_fk_tiene_hijos EXCEPTION;   -- ORA-02292
+    PRAGMA EXCEPTION_INIT(e_fk_tiene_hijos, -2292);
 
     PROCEDURE crear_entrada (
            p_ubicacion         IN  entradas.ubicacion%TYPE,
@@ -194,6 +202,33 @@ CREATE OR REPLACE PACKAGE BODY pkg_entradas AS
                 OR UPPER(e.qr)        LIKE v_filtro
              ORDER BY e.id_entrada;
     END listar_entradas;
+
+    PROCEDURE eliminar_entrada (p_id_entrada IN entradas.id_entrada%TYPE) IS
+        v_existe   NUMBER;
+        v_consumos NUMBER;
+    BEGIN
+        SELECT COUNT(*) INTO v_existe FROM entradas WHERE id_entrada = p_id_entrada;
+
+        IF v_existe = 0 THEN
+            RAISE_APPLICATION_ERROR(-20004,
+                'La entrada con ID ' || p_id_entrada || ' no existe');
+        END IF;
+
+        SELECT COUNT(*) INTO v_consumos FROM consumos_entradas WHERE id_entrada = p_id_entrada;
+
+        IF v_consumos > 0 THEN
+            RAISE_APPLICATION_ERROR(-20005,
+                'No se puede eliminar la entrada ' || p_id_entrada ||
+                ': tiene ' || v_consumos || ' consumo(s) registrado(s)');
+        END IF;
+
+        DELETE FROM entradas WHERE id_entrada = p_id_entrada;
+    EXCEPTION
+        WHEN e_fk_tiene_hijos THEN
+            RAISE_APPLICATION_ERROR(-20005,
+                'No se puede eliminar la entrada ' || p_id_entrada ||
+                ': tiene registros asociados');
+    END eliminar_entrada;
 
 END pkg_entradas;
 /
