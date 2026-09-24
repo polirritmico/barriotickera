@@ -3,7 +3,7 @@
 -- UBICACION: VILLA LAS 6 TORRES, LA FLORIDA
 -- ============================================================
 -- IMPORTANTE:
--- 1. Ejecutar primero Desarrollo_ticketera.sql.
+-- 1. Ejecutar primero creacion_barrioticketera.sql.
 -- 2. Ejecutar este archivo una sola vez.
 -- 3. Este archivo no crea ni modifica tablas: solo inserta datos.
 -- 4. Todos los nombres, correos, RUT y codigos QR son ficticios.
