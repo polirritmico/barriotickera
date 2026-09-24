@@ -5,6 +5,11 @@
    -20003: Referencia inexistente / FK inválida
    -20004: Entrada no encontrada
    -20999: Error inesperado
+
+   Procedimientos:
+   - crear_entrada
+   - actualizar_entrada
+   - listar_entradas (filtro opcional; NULL = todas)
    */
 
 CREATE OR REPLACE PACKAGE pkg_entradas AS
@@ -29,6 +34,12 @@ CREATE OR REPLACE PACKAGE pkg_entradas AS
         p_id_evento         IN entradas.id_evento%TYPE,
         p_id_venta_entrada  IN entradas.id_venta_entrada%TYPE,
         p_id_estado_entrada IN entradas.id_estado_entrada%TYPE
+    );
+
+    -- R: listado (filtro opcional por ubicacion o QR)
+    PROCEDURE listar_entradas (
+        p_filtro IN  VARCHAR2,
+        p_cursor OUT SYS_REFCURSOR
     );
 
 END pkg_entradas;
@@ -156,6 +167,34 @@ CREATE OR REPLACE PACKAGE BODY pkg_entradas AS
                     );
                 END IF;
     END actualizar_entrada;
+
+    PROCEDURE listar_entradas (
+        p_filtro IN  VARCHAR2,
+        p_cursor OUT SYS_REFCURSOR
+    ) AS
+        v_filtro VARCHAR2(200) := '%' || UPPER(TRIM(p_filtro)) || '%';
+    BEGIN
+        OPEN p_cursor FOR
+            SELECT e.id_entrada,
+                   e.ubicacion,
+                   e.qr,
+                   e.id_tipo_entrada,
+                   t.nombre AS tipo_entrada,
+                   e.id_evento,
+                   ev.nombre AS evento,
+                   e.id_venta_entrada,
+                   e.id_estado_entrada,
+                   s.nombre AS estado_entrada
+              FROM entradas e
+              JOIN tipos_entradas   t  ON t.id_tipo_entrada   = e.id_tipo_entrada
+              JOIN eventos          ev ON ev.id_evento        = e.id_evento
+              JOIN estados_entradas s  ON s.id_estado_entrada = e.id_estado_entrada
+             WHERE p_filtro IS NULL
+                OR UPPER(e.ubicacion) LIKE v_filtro
+                OR UPPER(e.qr)        LIKE v_filtro
+             ORDER BY e.id_entrada;
+    END listar_entradas;
+
 END pkg_entradas;
 /
 
