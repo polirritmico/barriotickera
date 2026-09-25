@@ -1,0 +1,2 @@
+class EntradaDAO:
+    pass
