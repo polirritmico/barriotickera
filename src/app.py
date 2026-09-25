@@ -125,7 +125,16 @@ class App:
         print("  ✔ Entrada actualizada correctamente.")
 
     def accion_eliminar(self) -> None:
-        print("eliminar")
+        id = pedir_numero("ID de la entrada a eliminar")
+        entrada: EntradaResolved = self.dao.obtener(id)
+        self.print_entrada(entrada)
+
+        msg = "\n  ¿Confirma la eliminación? (s/n): "
+        if input(msg).strip().lower() == "s":
+            self.dao.eliminar(id)
+            print("  ✔ Entrada eliminada.")
+        else:
+            print("  Operación cancelada.")
 
     def accion_demo(self) -> None:
         print("demo")
