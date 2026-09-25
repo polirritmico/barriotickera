@@ -8,6 +8,7 @@ services:
       - ORACLE_PWD=PasswordSeguro
     volumes:
       - ticketera_data:/opt/oracle/oradata
+      - ./sql/00_configuracion_db.sql:/opt/oracle/scripts/startup/init.sql:ro
     restart: unless-stopped
 
 volumes:
