@@ -2,6 +2,7 @@
 import os
 import sys
 
+from src.app import App
 from src.database import Database
 from src.database_config import DatabaseConfig
 from src.entrada_dao import EntradaDAO
@@ -17,9 +18,15 @@ def main():
         os.exit(1)
 
     with database.conexion:
-        db_version = database.connection.version
+        db_version = database.conexion.version
         print(f"Conectado a OracleDB {db_version} como {db_config.service_name}")
-        dao = EntradaDAO(database)
+
+        dao = EntradaDAO(database.conexion)
+        if modo_demo:
+            ModoDemo(dao).run()
+        else:
+            App(dao).menu()
+            return
 
 
 if __name__ == "__main__":
