@@ -105,9 +105,9 @@ class ModoDemo:
             except EntradaError as err:
                 print(f"  {nombre}: {err}")
 
-            self.print_header("6. DELETE (eliminar)")
-            self.dao.eliminar(nueva_entrada.id)
-            try:
-                self.dao.obtener(nueva_entrada.id)
-            except EntradaError as err:
-                print(f"  Eliminado. Verificación: {err}")
+        self.print_header("6. DELETE (eliminar)")
+        self.dao.eliminar(nueva_entrada.id)
+        try:
+            self.dao.obtener(nueva_entrada.id)
+        except EntradaError as err:
+            print(f"  Eliminado. Verificación: {err}")
