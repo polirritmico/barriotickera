@@ -22,11 +22,14 @@ def main():
         print(f"Conectado a OracleDB {db_version} como {db_config.service_name}")
 
         dao = EntradaDAO(database.conexion)
-        if modo_demo:
-            ModoDemo(dao).run()
-        else:
-            App(dao).menu()
-            return
+        try:
+            if modo_demo:
+                ModoDemo(dao).run()
+            else:
+                App(dao).menu()
+                return
+        except KeyboardInterrupt:
+            print("\nOperación cancelada por el usuario.")
 
 
 if __name__ == "__main__":
