@@ -4,6 +4,7 @@ from oracledb import DatabaseError
 
 from src.entrada import Entrada, EntradaResolved
 from src.entrada_dao import EntradaDAO
+from src.entrada_prints import print_entrada, print_listado
 from src.exceptions import EntradaError
 from src.inputs_usuario import (
     pedir_numero,
@@ -43,51 +44,15 @@ class App:
             "0": self.accion_salir,
         }
 
-    def _print_cabecera(self) -> None:
-        print(
-            f"  {'ID':>6}  {'UBICACION':<15} {'QR':<15}  "
-            f"{'ID_TIPO':>7} {'TIPO':<18} {'ID_EV':>6} {'EVENTO':<32} "
-            f"{'ID_VENTA':>8} {'ID_EST':>6} {'ESTADO':<15}"
-        )
-        print("  " + "-" * 135)
-
-    def _print_entrada(self, entrada: EntradaResolved) -> None:
-        print(
-            f"  {entrada.id or 'N/A':>6}  "
-            f"{entrada.ubicacion:<15} "
-            f"{entrada.qr:<15}  "
-            f"{entrada.id_tipo_entrada:>7} "
-            f"{entrada.tipo_entrada:<18} "
-            f"{entrada.id_evento:>6} "
-            f"{entrada.evento:<32} "
-            f"{entrada.id_venta_entrada or 'N/A':>8} "
-            f"{entrada.id_estado_entrada:>6} "
-            f"{entrada.estado_entrada:<15}"
-        )
-
-    def print_listado(self, entradas: list[EntradaResolved]) -> None:
-        if not entradas:
-            print("  (sin resultados)")
-            return
-
-        self._print_cabecera()
-
-        for entrada in entradas:
-            self._print_entrada(entrada)
-
-    def print_entrada(self, entrada: EntradaResolved) -> None:
-        self._print_cabecera()
-        self._print_entrada(entrada)
-
     def accion_listar(self) -> None:
         filtro = pedir_texto_opcional("-> Filtro por ubicación/qr (opcional)")
         res: list[EntradaResolved] = self.dao.listar(filtro)
-        self.print_listado(res)
+        print_listado(res)
 
     def accion_buscar(self) -> None:
         id = int(pedir_numero("Id a buscar"))
         res: EntradaResolved = self.dao.obtener(id)
-        self.print_entrada(res)
+        print_entrada(res)
 
     def accion_crear(self) -> None:
         print("Creando una nueva entrada. Ingrese los datos requeridos.\n")
@@ -106,7 +71,7 @@ class App:
         actual: EntradaResolved = self.dao.obtener(
             pedir_numero("Ingrese ID de la entrada")
         )
-        self.print_entrada(actual)
+        print_entrada(actual)
 
         print("\nIngrese nuevos valores (<Enter> para conservar el actual): ")
         nueva_entrada = Entrada(
@@ -127,7 +92,7 @@ class App:
     def accion_eliminar(self) -> None:
         id = pedir_numero("ID de la entrada a eliminar")
         entrada: EntradaResolved = self.dao.obtener(id)
-        self.print_entrada(entrada)
+        print_entrada(entrada)
 
         msg = "\n  ¿Confirma la eliminación? (s/n): "
         if input(msg).strip().lower() == "s":
