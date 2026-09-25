@@ -4,7 +4,7 @@ version = "0.1.0"
 description = "Sistema de gestión de entradas para eventos comunitarios"
 readme = "README.md"
 requires-python = ">=3.14"
-authors = [{ name = "Eduardo Bray", email = "ejbray@uc.cl" }, { name = "Rodrigo Callealta", email = "ro.callealta@duocuc.cl" }, { name = "Felipe Fernández", email = "fefernandez@duocuc.cl" }]
+authors = [{ name = "Eduardo Bray", email = "ejbray@uc.cl" }, { name = "Rodrigo Callealta", email = "ro.callealta@duocuc.cl" }, { name = "Felipe Fernández", email = "feli.fernandez@duocuc.cl" }]
 dependencies = [
   "oracledb>=26.0.1",
 ]
