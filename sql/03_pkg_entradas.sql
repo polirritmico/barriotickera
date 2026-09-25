@@ -199,7 +199,8 @@ CREATE OR REPLACE PACKAGE BODY pkg_entradas AS
               JOIN estados_entradas s  ON s.id_estado_entrada = e.id_estado_entrada
              WHERE p_filtro IS NULL
                 OR UPPER(e.ubicacion) LIKE v_filtro
-                OR UPPER(e.qr)        LIKE v_filtro
+                OR UPPER(e.ubicacion) = UPPER(TRIM(p_filtro))
+                --OR UPPER(e.qr)        LIKE v_filtro
              ORDER BY e.id_entrada;
     END listar_entradas;
 

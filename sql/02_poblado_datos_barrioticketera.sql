@@ -270,68 +270,1003 @@ FROM COMPRADORES WHERE correo = 'sofia.leiva@ejemplo.cl';
 -- Se agregan 45 vecinos ficticios. Junto con los cinco compradores
 -- anteriores, el evento queda con 50 personas compradoras.
 -- Cada uno de estos 45 vecinos compra una entrada y la utiliza.
-DECLARE
-    v_id_comprador       COMPRADORES.id_comprador%TYPE;
-    v_id_venta           VENTAS_ENTRADAS.id_venta_entrada%TYPE;
-    v_id_evento          EVENTOS.id_evento%TYPE;
-    v_id_tipo_entrada    TIPOS_ENTRADAS.id_tipo_entrada%TYPE;
-    v_id_estado_entrada  ESTADOS_ENTRADAS.id_estado_entrada%TYPE;
-    v_correo             COMPRADORES.correo%TYPE;
-BEGIN
-    SELECT id_evento
-      INTO v_id_evento
-      FROM EVENTOS
-     WHERE nombre = 'COMPLETADA PRO GATOS CALLEJEROS';
 
-    SELECT id_estado_entrada
-      INTO v_id_estado_entrada
-      FROM ESTADOS_ENTRADAS
-     WHERE nombre = 'UTILIZADA';
+-- COMPRADORES
+INSERT INTO COMPRADORES (correo) VALUES ('vecino06@ejemplo.cl');
+INSERT INTO COMPRADORES (correo) VALUES ('vecino07@ejemplo.cl');
+INSERT INTO COMPRADORES (correo) VALUES ('vecino08@ejemplo.cl');
+INSERT INTO COMPRADORES (correo) VALUES ('vecino09@ejemplo.cl');
+INSERT INTO COMPRADORES (correo) VALUES ('vecino10@ejemplo.cl');
+INSERT INTO COMPRADORES (correo) VALUES ('vecino11@ejemplo.cl');
+INSERT INTO COMPRADORES (correo) VALUES ('vecino12@ejemplo.cl');
+INSERT INTO COMPRADORES (correo) VALUES ('vecino13@ejemplo.cl');
+INSERT INTO COMPRADORES (correo) VALUES ('vecino14@ejemplo.cl');
+INSERT INTO COMPRADORES (correo) VALUES ('vecino15@ejemplo.cl');
+INSERT INTO COMPRADORES (correo) VALUES ('vecino16@ejemplo.cl');
+INSERT INTO COMPRADORES (correo) VALUES ('vecino17@ejemplo.cl');
+INSERT INTO COMPRADORES (correo) VALUES ('vecino18@ejemplo.cl');
+INSERT INTO COMPRADORES (correo) VALUES ('vecino19@ejemplo.cl');
+INSERT INTO COMPRADORES (correo) VALUES ('vecino20@ejemplo.cl');
+INSERT INTO COMPRADORES (correo) VALUES ('vecino21@ejemplo.cl');
+INSERT INTO COMPRADORES (correo) VALUES ('vecino22@ejemplo.cl');
+INSERT INTO COMPRADORES (correo) VALUES ('vecino23@ejemplo.cl');
+INSERT INTO COMPRADORES (correo) VALUES ('vecino24@ejemplo.cl');
+INSERT INTO COMPRADORES (correo) VALUES ('vecino25@ejemplo.cl');
+INSERT INTO COMPRADORES (correo) VALUES ('vecino26@ejemplo.cl');
+INSERT INTO COMPRADORES (correo) VALUES ('vecino27@ejemplo.cl');
+INSERT INTO COMPRADORES (correo) VALUES ('vecino28@ejemplo.cl');
+INSERT INTO COMPRADORES (correo) VALUES ('vecino29@ejemplo.cl');
+INSERT INTO COMPRADORES (correo) VALUES ('vecino30@ejemplo.cl');
+INSERT INTO COMPRADORES (correo) VALUES ('vecino31@ejemplo.cl');
+INSERT INTO COMPRADORES (correo) VALUES ('vecino32@ejemplo.cl');
+INSERT INTO COMPRADORES (correo) VALUES ('vecino33@ejemplo.cl');
+INSERT INTO COMPRADORES (correo) VALUES ('vecino34@ejemplo.cl');
+INSERT INTO COMPRADORES (correo) VALUES ('vecino35@ejemplo.cl');
+INSERT INTO COMPRADORES (correo) VALUES ('vecino36@ejemplo.cl');
+INSERT INTO COMPRADORES (correo) VALUES ('vecino37@ejemplo.cl');
+INSERT INTO COMPRADORES (correo) VALUES ('vecino38@ejemplo.cl');
+INSERT INTO COMPRADORES (correo) VALUES ('vecino39@ejemplo.cl');
+INSERT INTO COMPRADORES (correo) VALUES ('vecino40@ejemplo.cl');
+INSERT INTO COMPRADORES (correo) VALUES ('vecino41@ejemplo.cl');
+INSERT INTO COMPRADORES (correo) VALUES ('vecino42@ejemplo.cl');
+INSERT INTO COMPRADORES (correo) VALUES ('vecino43@ejemplo.cl');
+INSERT INTO COMPRADORES (correo) VALUES ('vecino44@ejemplo.cl');
+INSERT INTO COMPRADORES (correo) VALUES ('vecino45@ejemplo.cl');
+INSERT INTO COMPRADORES (correo) VALUES ('vecino46@ejemplo.cl');
+INSERT INTO COMPRADORES (correo) VALUES ('vecino47@ejemplo.cl');
+INSERT INTO COMPRADORES (correo) VALUES ('vecino48@ejemplo.cl');
+INSERT INTO COMPRADORES (correo) VALUES ('vecino49@ejemplo.cl');
+INSERT INTO COMPRADORES (correo) VALUES ('vecino50@ejemplo.cl');
 
-    FOR i IN 6..50 LOOP
-        v_correo := 'vecino' || LPAD(i, 2, '0') || '@ejemplo.cl';
+-- VENTAS
+INSERT INTO VENTAS_ENTRADAS (timestamp_venta, id_comprador)
+SELECT TO_TIMESTAMP('2026-09-06 11:30:00', 'YYYY-MM-DD HH24:MI:SS'), id_comprador
+FROM COMPRADORES
+WHERE correo = 'vecino06@ejemplo.cl';
+INSERT INTO VENTAS_ENTRADAS (timestamp_venta, id_comprador)
+SELECT TO_TIMESTAMP('2026-09-06 11:45:00', 'YYYY-MM-DD HH24:MI:SS'), id_comprador
+FROM COMPRADORES
+WHERE correo = 'vecino07@ejemplo.cl';
+INSERT INTO VENTAS_ENTRADAS (timestamp_venta, id_comprador)
+SELECT TO_TIMESTAMP('2026-09-06 12:00:00', 'YYYY-MM-DD HH24:MI:SS'), id_comprador
+FROM COMPRADORES
+WHERE correo = 'vecino08@ejemplo.cl';
+INSERT INTO VENTAS_ENTRADAS (timestamp_venta, id_comprador)
+SELECT TO_TIMESTAMP('2026-09-06 12:15:00', 'YYYY-MM-DD HH24:MI:SS'), id_comprador
+FROM COMPRADORES
+WHERE correo = 'vecino09@ejemplo.cl';
+INSERT INTO VENTAS_ENTRADAS (timestamp_venta, id_comprador)
+SELECT TO_TIMESTAMP('2026-09-06 12:30:00', 'YYYY-MM-DD HH24:MI:SS'), id_comprador
+FROM COMPRADORES
+WHERE correo = 'vecino10@ejemplo.cl';
+INSERT INTO VENTAS_ENTRADAS (timestamp_venta, id_comprador)
+SELECT TO_TIMESTAMP('2026-09-06 12:45:00', 'YYYY-MM-DD HH24:MI:SS'), id_comprador
+FROM COMPRADORES
+WHERE correo = 'vecino11@ejemplo.cl';
+INSERT INTO VENTAS_ENTRADAS (timestamp_venta, id_comprador)
+SELECT TO_TIMESTAMP('2026-09-06 13:00:00', 'YYYY-MM-DD HH24:MI:SS'), id_comprador
+FROM COMPRADORES
+WHERE correo = 'vecino12@ejemplo.cl';
+INSERT INTO VENTAS_ENTRADAS (timestamp_venta, id_comprador)
+SELECT TO_TIMESTAMP('2026-09-06 13:15:00', 'YYYY-MM-DD HH24:MI:SS'), id_comprador
+FROM COMPRADORES
+WHERE correo = 'vecino13@ejemplo.cl';
+INSERT INTO VENTAS_ENTRADAS (timestamp_venta, id_comprador)
+SELECT TO_TIMESTAMP('2026-09-06 13:30:00', 'YYYY-MM-DD HH24:MI:SS'), id_comprador
+FROM COMPRADORES
+WHERE correo = 'vecino14@ejemplo.cl';
+INSERT INTO VENTAS_ENTRADAS (timestamp_venta, id_comprador)
+SELECT TO_TIMESTAMP('2026-09-06 13:45:00', 'YYYY-MM-DD HH24:MI:SS'), id_comprador
+FROM COMPRADORES
+WHERE correo = 'vecino15@ejemplo.cl';
+INSERT INTO VENTAS_ENTRADAS (timestamp_venta, id_comprador)
+SELECT TO_TIMESTAMP('2026-09-06 14:00:00', 'YYYY-MM-DD HH24:MI:SS'), id_comprador
+FROM COMPRADORES
+WHERE correo = 'vecino16@ejemplo.cl';
+INSERT INTO VENTAS_ENTRADAS (timestamp_venta, id_comprador)
+SELECT TO_TIMESTAMP('2026-09-06 14:15:00', 'YYYY-MM-DD HH24:MI:SS'), id_comprador
+FROM COMPRADORES
+WHERE correo = 'vecino17@ejemplo.cl';
+INSERT INTO VENTAS_ENTRADAS (timestamp_venta, id_comprador)
+SELECT TO_TIMESTAMP('2026-09-06 14:30:00', 'YYYY-MM-DD HH24:MI:SS'), id_comprador
+FROM COMPRADORES
+WHERE correo = 'vecino18@ejemplo.cl';
+INSERT INTO VENTAS_ENTRADAS (timestamp_venta, id_comprador)
+SELECT TO_TIMESTAMP('2026-09-06 14:45:00', 'YYYY-MM-DD HH24:MI:SS'), id_comprador
+FROM COMPRADORES
+WHERE correo = 'vecino19@ejemplo.cl';
+INSERT INTO VENTAS_ENTRADAS (timestamp_venta, id_comprador)
+SELECT TO_TIMESTAMP('2026-09-06 15:00:00', 'YYYY-MM-DD HH24:MI:SS'), id_comprador
+FROM COMPRADORES
+WHERE correo = 'vecino20@ejemplo.cl';
+INSERT INTO VENTAS_ENTRADAS (timestamp_venta, id_comprador)
+SELECT TO_TIMESTAMP('2026-09-06 15:15:00', 'YYYY-MM-DD HH24:MI:SS'), id_comprador
+FROM COMPRADORES
+WHERE correo = 'vecino21@ejemplo.cl';
+INSERT INTO VENTAS_ENTRADAS (timestamp_venta, id_comprador)
+SELECT TO_TIMESTAMP('2026-09-06 15:30:00', 'YYYY-MM-DD HH24:MI:SS'), id_comprador
+FROM COMPRADORES
+WHERE correo = 'vecino22@ejemplo.cl';
+INSERT INTO VENTAS_ENTRADAS (timestamp_venta, id_comprador)
+SELECT TO_TIMESTAMP('2026-09-06 15:45:00', 'YYYY-MM-DD HH24:MI:SS'), id_comprador
+FROM COMPRADORES
+WHERE correo = 'vecino23@ejemplo.cl';
+INSERT INTO VENTAS_ENTRADAS (timestamp_venta, id_comprador)
+SELECT TO_TIMESTAMP('2026-09-06 16:00:00', 'YYYY-MM-DD HH24:MI:SS'), id_comprador
+FROM COMPRADORES
+WHERE correo = 'vecino24@ejemplo.cl';
+INSERT INTO VENTAS_ENTRADAS (timestamp_venta, id_comprador)
+SELECT TO_TIMESTAMP('2026-09-06 16:15:00', 'YYYY-MM-DD HH24:MI:SS'), id_comprador
+FROM COMPRADORES
+WHERE correo = 'vecino25@ejemplo.cl';
+INSERT INTO VENTAS_ENTRADAS (timestamp_venta, id_comprador)
+SELECT TO_TIMESTAMP('2026-09-06 16:30:00', 'YYYY-MM-DD HH24:MI:SS'), id_comprador
+FROM COMPRADORES
+WHERE correo = 'vecino26@ejemplo.cl';
+INSERT INTO VENTAS_ENTRADAS (timestamp_venta, id_comprador)
+SELECT TO_TIMESTAMP('2026-09-06 16:45:00', 'YYYY-MM-DD HH24:MI:SS'), id_comprador
+FROM COMPRADORES
+WHERE correo = 'vecino27@ejemplo.cl';
+INSERT INTO VENTAS_ENTRADAS (timestamp_venta, id_comprador)
+SELECT TO_TIMESTAMP('2026-09-06 17:00:00', 'YYYY-MM-DD HH24:MI:SS'), id_comprador
+FROM COMPRADORES
+WHERE correo = 'vecino28@ejemplo.cl';
+INSERT INTO VENTAS_ENTRADAS (timestamp_venta, id_comprador)
+SELECT TO_TIMESTAMP('2026-09-06 17:15:00', 'YYYY-MM-DD HH24:MI:SS'), id_comprador
+FROM COMPRADORES
+WHERE correo = 'vecino29@ejemplo.cl';
+INSERT INTO VENTAS_ENTRADAS (timestamp_venta, id_comprador)
+SELECT TO_TIMESTAMP('2026-09-06 17:30:00', 'YYYY-MM-DD HH24:MI:SS'), id_comprador
+FROM COMPRADORES
+WHERE correo = 'vecino30@ejemplo.cl';
+INSERT INTO VENTAS_ENTRADAS (timestamp_venta, id_comprador)
+SELECT TO_TIMESTAMP('2026-09-06 17:45:00', 'YYYY-MM-DD HH24:MI:SS'), id_comprador
+FROM COMPRADORES
+WHERE correo = 'vecino31@ejemplo.cl';
+INSERT INTO VENTAS_ENTRADAS (timestamp_venta, id_comprador)
+SELECT TO_TIMESTAMP('2026-09-06 18:00:00', 'YYYY-MM-DD HH24:MI:SS'), id_comprador
+FROM COMPRADORES
+WHERE correo = 'vecino32@ejemplo.cl';
+INSERT INTO VENTAS_ENTRADAS (timestamp_venta, id_comprador)
+SELECT TO_TIMESTAMP('2026-09-06 18:15:00', 'YYYY-MM-DD HH24:MI:SS'), id_comprador
+FROM COMPRADORES
+WHERE correo = 'vecino33@ejemplo.cl';
+INSERT INTO VENTAS_ENTRADAS (timestamp_venta, id_comprador)
+SELECT TO_TIMESTAMP('2026-09-06 18:30:00', 'YYYY-MM-DD HH24:MI:SS'), id_comprador
+FROM COMPRADORES
+WHERE correo = 'vecino34@ejemplo.cl';
+INSERT INTO VENTAS_ENTRADAS (timestamp_venta, id_comprador)
+SELECT TO_TIMESTAMP('2026-09-06 18:45:00', 'YYYY-MM-DD HH24:MI:SS'), id_comprador
+FROM COMPRADORES
+WHERE correo = 'vecino35@ejemplo.cl';
+INSERT INTO VENTAS_ENTRADAS (timestamp_venta, id_comprador)
+SELECT TO_TIMESTAMP('2026-09-06 19:00:00', 'YYYY-MM-DD HH24:MI:SS'), id_comprador
+FROM COMPRADORES
+WHERE correo = 'vecino36@ejemplo.cl';
+INSERT INTO VENTAS_ENTRADAS (timestamp_venta, id_comprador)
+SELECT TO_TIMESTAMP('2026-09-06 19:15:00', 'YYYY-MM-DD HH24:MI:SS'), id_comprador
+FROM COMPRADORES
+WHERE correo = 'vecino37@ejemplo.cl';
+INSERT INTO VENTAS_ENTRADAS (timestamp_venta, id_comprador)
+SELECT TO_TIMESTAMP('2026-09-06 19:30:00', 'YYYY-MM-DD HH24:MI:SS'), id_comprador
+FROM COMPRADORES
+WHERE correo = 'vecino38@ejemplo.cl';
+INSERT INTO VENTAS_ENTRADAS (timestamp_venta, id_comprador)
+SELECT TO_TIMESTAMP('2026-09-06 19:45:00', 'YYYY-MM-DD HH24:MI:SS'), id_comprador
+FROM COMPRADORES
+WHERE correo = 'vecino39@ejemplo.cl';
+INSERT INTO VENTAS_ENTRADAS (timestamp_venta, id_comprador)
+SELECT TO_TIMESTAMP('2026-09-06 20:00:00', 'YYYY-MM-DD HH24:MI:SS'), id_comprador
+FROM COMPRADORES
+WHERE correo = 'vecino40@ejemplo.cl';
+INSERT INTO VENTAS_ENTRADAS (timestamp_venta, id_comprador)
+SELECT TO_TIMESTAMP('2026-09-06 20:15:00', 'YYYY-MM-DD HH24:MI:SS'), id_comprador
+FROM COMPRADORES
+WHERE correo = 'vecino41@ejemplo.cl';
+INSERT INTO VENTAS_ENTRADAS (timestamp_venta, id_comprador)
+SELECT TO_TIMESTAMP('2026-09-06 20:30:00', 'YYYY-MM-DD HH24:MI:SS'), id_comprador
+FROM COMPRADORES
+WHERE correo = 'vecino42@ejemplo.cl';
+INSERT INTO VENTAS_ENTRADAS (timestamp_venta, id_comprador)
+SELECT TO_TIMESTAMP('2026-09-06 20:45:00', 'YYYY-MM-DD HH24:MI:SS'), id_comprador
+FROM COMPRADORES
+WHERE correo = 'vecino43@ejemplo.cl';
+INSERT INTO VENTAS_ENTRADAS (timestamp_venta, id_comprador)
+SELECT TO_TIMESTAMP('2026-09-06 21:00:00', 'YYYY-MM-DD HH24:MI:SS'), id_comprador
+FROM COMPRADORES
+WHERE correo = 'vecino44@ejemplo.cl';
+INSERT INTO VENTAS_ENTRADAS (timestamp_venta, id_comprador)
+SELECT TO_TIMESTAMP('2026-09-06 21:15:00', 'YYYY-MM-DD HH24:MI:SS'), id_comprador
+FROM COMPRADORES
+WHERE correo = 'vecino45@ejemplo.cl';
+INSERT INTO VENTAS_ENTRADAS (timestamp_venta, id_comprador)
+SELECT TO_TIMESTAMP('2026-09-06 21:30:00', 'YYYY-MM-DD HH24:MI:SS'), id_comprador
+FROM COMPRADORES
+WHERE correo = 'vecino46@ejemplo.cl';
+INSERT INTO VENTAS_ENTRADAS (timestamp_venta, id_comprador)
+SELECT TO_TIMESTAMP('2026-09-06 21:45:00', 'YYYY-MM-DD HH24:MI:SS'), id_comprador
+FROM COMPRADORES
+WHERE correo = 'vecino47@ejemplo.cl';
+INSERT INTO VENTAS_ENTRADAS (timestamp_venta, id_comprador)
+SELECT TO_TIMESTAMP('2026-09-06 22:00:00', 'YYYY-MM-DD HH24:MI:SS'), id_comprador
+FROM COMPRADORES
+WHERE correo = 'vecino48@ejemplo.cl';
+INSERT INTO VENTAS_ENTRADAS (timestamp_venta, id_comprador)
+SELECT TO_TIMESTAMP('2026-09-06 22:15:00', 'YYYY-MM-DD HH24:MI:SS'), id_comprador
+FROM COMPRADORES
+WHERE correo = 'vecino49@ejemplo.cl';
+INSERT INTO VENTAS_ENTRADAS (timestamp_venta, id_comprador)
+SELECT TO_TIMESTAMP('2026-09-06 22:30:00', 'YYYY-MM-DD HH24:MI:SS'), id_comprador
+FROM COMPRADORES
+WHERE correo = 'vecino50@ejemplo.cl';
 
-        INSERT INTO COMPRADORES (correo)
-        VALUES (v_correo)
-        RETURNING id_comprador INTO v_id_comprador;
+-- ENTRADAS
+INSERT INTO ENTRADAS (
+    ubicacion, qr, id_tipo_entrada, id_evento,
+    id_venta_entrada, id_estado_entrada
+)
+SELECT
+    'MESA 06', 'QR-GATOS-V0006',
+    te.id_tipo_entrada, e.id_evento,
+    ve.id_venta_entrada, ee.id_estado_entrada
+FROM TIPOS_ENTRADAS te
+JOIN EVENTOS e ON e.id_evento = te.id_evento
+CROSS JOIN VENTAS_ENTRADAS ve
+JOIN COMPRADORES c ON c.id_comprador = ve.id_comprador
+CROSS JOIN ESTADOS_ENTRADAS ee
+WHERE te.nombre = 'ENTRADA GENERAL'
+  AND e.nombre = 'COMPLETADA PRO GATOS CALLEJEROS'
+  AND c.correo = 'vecino06@ejemplo.cl'
+  AND ee.nombre = 'UTILIZADA';
+INSERT INTO ENTRADAS (
+    ubicacion, qr, id_tipo_entrada, id_evento,
+    id_venta_entrada, id_estado_entrada
+)
+SELECT
+    'MESA 07', 'QR-GATOS-V0007',
+    te.id_tipo_entrada, e.id_evento,
+    ve.id_venta_entrada, ee.id_estado_entrada
+FROM TIPOS_ENTRADAS te
+JOIN EVENTOS e ON e.id_evento = te.id_evento
+CROSS JOIN VENTAS_ENTRADAS ve
+JOIN COMPRADORES c ON c.id_comprador = ve.id_comprador
+CROSS JOIN ESTADOS_ENTRADAS ee
+WHERE te.nombre = 'ENTRADA GENERAL'
+  AND e.nombre = 'COMPLETADA PRO GATOS CALLEJEROS'
+  AND c.correo = 'vecino07@ejemplo.cl'
+  AND ee.nombre = 'UTILIZADA';
+INSERT INTO ENTRADAS (
+    ubicacion, qr, id_tipo_entrada, id_evento,
+    id_venta_entrada, id_estado_entrada
+)
+SELECT
+    'MESA 08', 'QR-GATOS-V0008',
+    te.id_tipo_entrada, e.id_evento,
+    ve.id_venta_entrada, ee.id_estado_entrada
+FROM TIPOS_ENTRADAS te
+JOIN EVENTOS e ON e.id_evento = te.id_evento
+CROSS JOIN VENTAS_ENTRADAS ve
+JOIN COMPRADORES c ON c.id_comprador = ve.id_comprador
+CROSS JOIN ESTADOS_ENTRADAS ee
+WHERE te.nombre = 'ENTRADA GENERAL'
+  AND e.nombre = 'COMPLETADA PRO GATOS CALLEJEROS'
+  AND c.correo = 'vecino08@ejemplo.cl'
+  AND ee.nombre = 'UTILIZADA';
+INSERT INTO ENTRADAS (
+    ubicacion, qr, id_tipo_entrada, id_evento,
+    id_venta_entrada, id_estado_entrada
+)
+SELECT
+    'MESA 09', 'QR-GATOS-V0009',
+    te.id_tipo_entrada, e.id_evento,
+    ve.id_venta_entrada, ee.id_estado_entrada
+FROM TIPOS_ENTRADAS te
+JOIN EVENTOS e ON e.id_evento = te.id_evento
+CROSS JOIN VENTAS_ENTRADAS ve
+JOIN COMPRADORES c ON c.id_comprador = ve.id_comprador
+CROSS JOIN ESTADOS_ENTRADAS ee
+WHERE te.nombre = 'ENTRADA GENERAL'
+  AND e.nombre = 'COMPLETADA PRO GATOS CALLEJEROS'
+  AND c.correo = 'vecino09@ejemplo.cl'
+  AND ee.nombre = 'UTILIZADA';
+INSERT INTO ENTRADAS (
+    ubicacion, qr, id_tipo_entrada, id_evento,
+    id_venta_entrada, id_estado_entrada
+)
+SELECT
+    'MESA 10', 'QR-GATOS-V0010',
+    te.id_tipo_entrada, e.id_evento,
+    ve.id_venta_entrada, ee.id_estado_entrada
+FROM TIPOS_ENTRADAS te
+JOIN EVENTOS e ON e.id_evento = te.id_evento
+CROSS JOIN VENTAS_ENTRADAS ve
+JOIN COMPRADORES c ON c.id_comprador = ve.id_comprador
+CROSS JOIN ESTADOS_ENTRADAS ee
+WHERE te.nombre = 'ENTRADA GENERAL'
+  AND e.nombre = 'COMPLETADA PRO GATOS CALLEJEROS'
+  AND c.correo = 'vecino10@ejemplo.cl'
+  AND ee.nombre = 'UTILIZADA';
+INSERT INTO ENTRADAS (
+    ubicacion, qr, id_tipo_entrada, id_evento,
+    id_venta_entrada, id_estado_entrada
+)
+SELECT
+    'MESA 11', 'QR-GATOS-V0011',
+    te.id_tipo_entrada, e.id_evento,
+    ve.id_venta_entrada, ee.id_estado_entrada
+FROM TIPOS_ENTRADAS te
+JOIN EVENTOS e ON e.id_evento = te.id_evento
+CROSS JOIN VENTAS_ENTRADAS ve
+JOIN COMPRADORES c ON c.id_comprador = ve.id_comprador
+CROSS JOIN ESTADOS_ENTRADAS ee
+WHERE te.nombre = 'ENTRADA GENERAL'
+  AND e.nombre = 'COMPLETADA PRO GATOS CALLEJEROS'
+  AND c.correo = 'vecino11@ejemplo.cl'
+  AND ee.nombre = 'UTILIZADA';
+INSERT INTO ENTRADAS (
+    ubicacion, qr, id_tipo_entrada, id_evento,
+    id_venta_entrada, id_estado_entrada
+)
+SELECT
+    'MESA 12', 'QR-GATOS-V0012',
+    te.id_tipo_entrada, e.id_evento,
+    ve.id_venta_entrada, ee.id_estado_entrada
+FROM TIPOS_ENTRADAS te
+JOIN EVENTOS e ON e.id_evento = te.id_evento
+CROSS JOIN VENTAS_ENTRADAS ve
+JOIN COMPRADORES c ON c.id_comprador = ve.id_comprador
+CROSS JOIN ESTADOS_ENTRADAS ee
+WHERE te.nombre = 'ENTRADA GENERAL'
+  AND e.nombre = 'COMPLETADA PRO GATOS CALLEJEROS'
+  AND c.correo = 'vecino12@ejemplo.cl'
+  AND ee.nombre = 'UTILIZADA';
+INSERT INTO ENTRADAS (
+    ubicacion, qr, id_tipo_entrada, id_evento,
+    id_venta_entrada, id_estado_entrada
+)
+SELECT
+    'MESA 13', 'QR-GATOS-V0013',
+    te.id_tipo_entrada, e.id_evento,
+    ve.id_venta_entrada, ee.id_estado_entrada
+FROM TIPOS_ENTRADAS te
+JOIN EVENTOS e ON e.id_evento = te.id_evento
+CROSS JOIN VENTAS_ENTRADAS ve
+JOIN COMPRADORES c ON c.id_comprador = ve.id_comprador
+CROSS JOIN ESTADOS_ENTRADAS ee
+WHERE te.nombre = 'ENTRADA GENERAL'
+  AND e.nombre = 'COMPLETADA PRO GATOS CALLEJEROS'
+  AND c.correo = 'vecino13@ejemplo.cl'
+  AND ee.nombre = 'UTILIZADA';
+INSERT INTO ENTRADAS (
+    ubicacion, qr, id_tipo_entrada, id_evento,
+    id_venta_entrada, id_estado_entrada
+)
+SELECT
+    'MESA 14', 'QR-GATOS-V0014',
+    te.id_tipo_entrada, e.id_evento,
+    ve.id_venta_entrada, ee.id_estado_entrada
+FROM TIPOS_ENTRADAS te
+JOIN EVENTOS e ON e.id_evento = te.id_evento
+CROSS JOIN VENTAS_ENTRADAS ve
+JOIN COMPRADORES c ON c.id_comprador = ve.id_comprador
+CROSS JOIN ESTADOS_ENTRADAS ee
+WHERE te.nombre = 'ENTRADA GENERAL'
+  AND e.nombre = 'COMPLETADA PRO GATOS CALLEJEROS'
+  AND c.correo = 'vecino14@ejemplo.cl'
+  AND ee.nombre = 'UTILIZADA';
+INSERT INTO ENTRADAS (
+    ubicacion, qr, id_tipo_entrada, id_evento,
+    id_venta_entrada, id_estado_entrada
+)
+SELECT
+    'MESA 15', 'QR-GATOS-V0015',
+    te.id_tipo_entrada, e.id_evento,
+    ve.id_venta_entrada, ee.id_estado_entrada
+FROM TIPOS_ENTRADAS te
+JOIN EVENTOS e ON e.id_evento = te.id_evento
+CROSS JOIN VENTAS_ENTRADAS ve
+JOIN COMPRADORES c ON c.id_comprador = ve.id_comprador
+CROSS JOIN ESTADOS_ENTRADAS ee
+WHERE te.nombre = 'ENTRADA GENERAL'
+  AND e.nombre = 'COMPLETADA PRO GATOS CALLEJEROS'
+  AND c.correo = 'vecino15@ejemplo.cl'
+  AND ee.nombre = 'UTILIZADA';
+INSERT INTO ENTRADAS (
+    ubicacion, qr, id_tipo_entrada, id_evento,
+    id_venta_entrada, id_estado_entrada
+)
+SELECT
+    'MESA 16', 'QR-GATOS-V0016',
+    te.id_tipo_entrada, e.id_evento,
+    ve.id_venta_entrada, ee.id_estado_entrada
+FROM TIPOS_ENTRADAS te
+JOIN EVENTOS e ON e.id_evento = te.id_evento
+CROSS JOIN VENTAS_ENTRADAS ve
+JOIN COMPRADORES c ON c.id_comprador = ve.id_comprador
+CROSS JOIN ESTADOS_ENTRADAS ee
+WHERE te.nombre = 'ENTRADA GENERAL'
+  AND e.nombre = 'COMPLETADA PRO GATOS CALLEJEROS'
+  AND c.correo = 'vecino16@ejemplo.cl'
+  AND ee.nombre = 'UTILIZADA';
+INSERT INTO ENTRADAS (
+    ubicacion, qr, id_tipo_entrada, id_evento,
+    id_venta_entrada, id_estado_entrada
+)
+SELECT
+    'MESA 17', 'QR-GATOS-V0017',
+    te.id_tipo_entrada, e.id_evento,
+    ve.id_venta_entrada, ee.id_estado_entrada
+FROM TIPOS_ENTRADAS te
+JOIN EVENTOS e ON e.id_evento = te.id_evento
+CROSS JOIN VENTAS_ENTRADAS ve
+JOIN COMPRADORES c ON c.id_comprador = ve.id_comprador
+CROSS JOIN ESTADOS_ENTRADAS ee
+WHERE te.nombre = 'ENTRADA GENERAL'
+  AND e.nombre = 'COMPLETADA PRO GATOS CALLEJEROS'
+  AND c.correo = 'vecino17@ejemplo.cl'
+  AND ee.nombre = 'UTILIZADA';
+INSERT INTO ENTRADAS (
+    ubicacion, qr, id_tipo_entrada, id_evento,
+    id_venta_entrada, id_estado_entrada
+)
+SELECT
+    'MESA 18', 'QR-GATOS-V0018',
+    te.id_tipo_entrada, e.id_evento,
+    ve.id_venta_entrada, ee.id_estado_entrada
+FROM TIPOS_ENTRADAS te
+JOIN EVENTOS e ON e.id_evento = te.id_evento
+CROSS JOIN VENTAS_ENTRADAS ve
+JOIN COMPRADORES c ON c.id_comprador = ve.id_comprador
+CROSS JOIN ESTADOS_ENTRADAS ee
+WHERE te.nombre = 'ENTRADA GENERAL'
+  AND e.nombre = 'COMPLETADA PRO GATOS CALLEJEROS'
+  AND c.correo = 'vecino18@ejemplo.cl'
+  AND ee.nombre = 'UTILIZADA';
+INSERT INTO ENTRADAS (
+    ubicacion, qr, id_tipo_entrada, id_evento,
+    id_venta_entrada, id_estado_entrada
+)
+SELECT
+    'MESA 19', 'QR-GATOS-V0019',
+    te.id_tipo_entrada, e.id_evento,
+    ve.id_venta_entrada, ee.id_estado_entrada
+FROM TIPOS_ENTRADAS te
+JOIN EVENTOS e ON e.id_evento = te.id_evento
+CROSS JOIN VENTAS_ENTRADAS ve
+JOIN COMPRADORES c ON c.id_comprador = ve.id_comprador
+CROSS JOIN ESTADOS_ENTRADAS ee
+WHERE te.nombre = 'ENTRADA GENERAL'
+  AND e.nombre = 'COMPLETADA PRO GATOS CALLEJEROS'
+  AND c.correo = 'vecino19@ejemplo.cl'
+  AND ee.nombre = 'UTILIZADA';
+INSERT INTO ENTRADAS (
+    ubicacion, qr, id_tipo_entrada, id_evento,
+    id_venta_entrada, id_estado_entrada
+)
+SELECT
+    'MESA 20', 'QR-GATOS-V0020',
+    te.id_tipo_entrada, e.id_evento,
+    ve.id_venta_entrada, ee.id_estado_entrada
+FROM TIPOS_ENTRADAS te
+JOIN EVENTOS e ON e.id_evento = te.id_evento
+CROSS JOIN VENTAS_ENTRADAS ve
+JOIN COMPRADORES c ON c.id_comprador = ve.id_comprador
+CROSS JOIN ESTADOS_ENTRADAS ee
+WHERE te.nombre = 'ENTRADA GENERAL'
+  AND e.nombre = 'COMPLETADA PRO GATOS CALLEJEROS'
+  AND c.correo = 'vecino20@ejemplo.cl'
+  AND ee.nombre = 'UTILIZADA';
+INSERT INTO ENTRADAS (
+    ubicacion, qr, id_tipo_entrada, id_evento,
+    id_venta_entrada, id_estado_entrada
+)
+SELECT
+    'MESA 21', 'QR-GATOS-V0021',
+    te.id_tipo_entrada, e.id_evento,
+    ve.id_venta_entrada, ee.id_estado_entrada
+FROM TIPOS_ENTRADAS te
+JOIN EVENTOS e ON e.id_evento = te.id_evento
+CROSS JOIN VENTAS_ENTRADAS ve
+JOIN COMPRADORES c ON c.id_comprador = ve.id_comprador
+CROSS JOIN ESTADOS_ENTRADAS ee
+WHERE te.nombre = 'ENTRADA GENERAL'
+  AND e.nombre = 'COMPLETADA PRO GATOS CALLEJEROS'
+  AND c.correo = 'vecino21@ejemplo.cl'
+  AND ee.nombre = 'UTILIZADA';
+INSERT INTO ENTRADAS (
+    ubicacion, qr, id_tipo_entrada, id_evento,
+    id_venta_entrada, id_estado_entrada
+)
+SELECT
+    'MESA 22', 'QR-GATOS-V0022',
+    te.id_tipo_entrada, e.id_evento,
+    ve.id_venta_entrada, ee.id_estado_entrada
+FROM TIPOS_ENTRADAS te
+JOIN EVENTOS e ON e.id_evento = te.id_evento
+CROSS JOIN VENTAS_ENTRADAS ve
+JOIN COMPRADORES c ON c.id_comprador = ve.id_comprador
+CROSS JOIN ESTADOS_ENTRADAS ee
+WHERE te.nombre = 'ENTRADA GENERAL'
+  AND e.nombre = 'COMPLETADA PRO GATOS CALLEJEROS'
+  AND c.correo = 'vecino22@ejemplo.cl'
+  AND ee.nombre = 'UTILIZADA';
+INSERT INTO ENTRADAS (
+    ubicacion, qr, id_tipo_entrada, id_evento,
+    id_venta_entrada, id_estado_entrada
+)
+SELECT
+    'MESA 23', 'QR-GATOS-V0023',
+    te.id_tipo_entrada, e.id_evento,
+    ve.id_venta_entrada, ee.id_estado_entrada
+FROM TIPOS_ENTRADAS te
+JOIN EVENTOS e ON e.id_evento = te.id_evento
+CROSS JOIN VENTAS_ENTRADAS ve
+JOIN COMPRADORES c ON c.id_comprador = ve.id_comprador
+CROSS JOIN ESTADOS_ENTRADAS ee
+WHERE te.nombre = 'ENTRADA GENERAL'
+  AND e.nombre = 'COMPLETADA PRO GATOS CALLEJEROS'
+  AND c.correo = 'vecino23@ejemplo.cl'
+  AND ee.nombre = 'UTILIZADA';
+INSERT INTO ENTRADAS (
+    ubicacion, qr, id_tipo_entrada, id_evento,
+    id_venta_entrada, id_estado_entrada
+)
+SELECT
+    'MESA 24', 'QR-GATOS-V0024',
+    te.id_tipo_entrada, e.id_evento,
+    ve.id_venta_entrada, ee.id_estado_entrada
+FROM TIPOS_ENTRADAS te
+JOIN EVENTOS e ON e.id_evento = te.id_evento
+CROSS JOIN VENTAS_ENTRADAS ve
+JOIN COMPRADORES c ON c.id_comprador = ve.id_comprador
+CROSS JOIN ESTADOS_ENTRADAS ee
+WHERE te.nombre = 'ENTRADA GENERAL'
+  AND e.nombre = 'COMPLETADA PRO GATOS CALLEJEROS'
+  AND c.correo = 'vecino24@ejemplo.cl'
+  AND ee.nombre = 'UTILIZADA';
+INSERT INTO ENTRADAS (
+    ubicacion, qr, id_tipo_entrada, id_evento,
+    id_venta_entrada, id_estado_entrada
+)
+SELECT
+    'MESA 25', 'QR-GATOS-V0025',
+    te.id_tipo_entrada, e.id_evento,
+    ve.id_venta_entrada, ee.id_estado_entrada
+FROM TIPOS_ENTRADAS te
+JOIN EVENTOS e ON e.id_evento = te.id_evento
+CROSS JOIN VENTAS_ENTRADAS ve
+JOIN COMPRADORES c ON c.id_comprador = ve.id_comprador
+CROSS JOIN ESTADOS_ENTRADAS ee
+WHERE te.nombre = 'ENTRADA GENERAL'
+  AND e.nombre = 'COMPLETADA PRO GATOS CALLEJEROS'
+  AND c.correo = 'vecino25@ejemplo.cl'
+  AND ee.nombre = 'UTILIZADA';
+INSERT INTO ENTRADAS (
+    ubicacion, qr, id_tipo_entrada, id_evento,
+    id_venta_entrada, id_estado_entrada
+)
+SELECT
+    'MESA 26', 'QR-GATOS-V0026',
+    te.id_tipo_entrada, e.id_evento,
+    ve.id_venta_entrada, ee.id_estado_entrada
+FROM TIPOS_ENTRADAS te
+JOIN EVENTOS e ON e.id_evento = te.id_evento
+CROSS JOIN VENTAS_ENTRADAS ve
+JOIN COMPRADORES c ON c.id_comprador = ve.id_comprador
+CROSS JOIN ESTADOS_ENTRADAS ee
+WHERE te.nombre = 'ENTRADA GENERAL'
+  AND e.nombre = 'COMPLETADA PRO GATOS CALLEJEROS'
+  AND c.correo = 'vecino26@ejemplo.cl'
+  AND ee.nombre = 'UTILIZADA';
+INSERT INTO ENTRADAS (
+    ubicacion, qr, id_tipo_entrada, id_evento,
+    id_venta_entrada, id_estado_entrada
+)
+SELECT
+    'MESA 27', 'QR-GATOS-V0027',
+    te.id_tipo_entrada, e.id_evento,
+    ve.id_venta_entrada, ee.id_estado_entrada
+FROM TIPOS_ENTRADAS te
+JOIN EVENTOS e ON e.id_evento = te.id_evento
+CROSS JOIN VENTAS_ENTRADAS ve
+JOIN COMPRADORES c ON c.id_comprador = ve.id_comprador
+CROSS JOIN ESTADOS_ENTRADAS ee
+WHERE te.nombre = 'ENTRADA GENERAL'
+  AND e.nombre = 'COMPLETADA PRO GATOS CALLEJEROS'
+  AND c.correo = 'vecino27@ejemplo.cl'
+  AND ee.nombre = 'UTILIZADA';
+INSERT INTO ENTRADAS (
+    ubicacion, qr, id_tipo_entrada, id_evento,
+    id_venta_entrada, id_estado_entrada
+)
+SELECT
+    'MESA 28', 'QR-GATOS-V0028',
+    te.id_tipo_entrada, e.id_evento,
+    ve.id_venta_entrada, ee.id_estado_entrada
+FROM TIPOS_ENTRADAS te
+JOIN EVENTOS e ON e.id_evento = te.id_evento
+CROSS JOIN VENTAS_ENTRADAS ve
+JOIN COMPRADORES c ON c.id_comprador = ve.id_comprador
+CROSS JOIN ESTADOS_ENTRADAS ee
+WHERE te.nombre = 'ENTRADA GENERAL'
+  AND e.nombre = 'COMPLETADA PRO GATOS CALLEJEROS'
+  AND c.correo = 'vecino28@ejemplo.cl'
+  AND ee.nombre = 'UTILIZADA';
+INSERT INTO ENTRADAS (
+    ubicacion, qr, id_tipo_entrada, id_evento,
+    id_venta_entrada, id_estado_entrada
+)
+SELECT
+    'MESA 29', 'QR-GATOS-V0029',
+    te.id_tipo_entrada, e.id_evento,
+    ve.id_venta_entrada, ee.id_estado_entrada
+FROM TIPOS_ENTRADAS te
+JOIN EVENTOS e ON e.id_evento = te.id_evento
+CROSS JOIN VENTAS_ENTRADAS ve
+JOIN COMPRADORES c ON c.id_comprador = ve.id_comprador
+CROSS JOIN ESTADOS_ENTRADAS ee
+WHERE te.nombre = 'ENTRADA GENERAL'
+  AND e.nombre = 'COMPLETADA PRO GATOS CALLEJEROS'
+  AND c.correo = 'vecino29@ejemplo.cl'
+  AND ee.nombre = 'UTILIZADA';
+INSERT INTO ENTRADAS (
+    ubicacion, qr, id_tipo_entrada, id_evento,
+    id_venta_entrada, id_estado_entrada
+)
+SELECT
+    'MESA 30', 'QR-GATOS-V0030',
+    te.id_tipo_entrada, e.id_evento,
+    ve.id_venta_entrada, ee.id_estado_entrada
+FROM TIPOS_ENTRADAS te
+JOIN EVENTOS e ON e.id_evento = te.id_evento
+CROSS JOIN VENTAS_ENTRADAS ve
+JOIN COMPRADORES c ON c.id_comprador = ve.id_comprador
+CROSS JOIN ESTADOS_ENTRADAS ee
+WHERE te.nombre = 'ENTRADA GENERAL'
+  AND e.nombre = 'COMPLETADA PRO GATOS CALLEJEROS'
+  AND c.correo = 'vecino30@ejemplo.cl'
+  AND ee.nombre = 'UTILIZADA';
+INSERT INTO ENTRADAS (
+    ubicacion, qr, id_tipo_entrada, id_evento,
+    id_venta_entrada, id_estado_entrada
+)
+SELECT
+    'MESA 31', 'QR-GATOS-V0031',
+    te.id_tipo_entrada, e.id_evento,
+    ve.id_venta_entrada, ee.id_estado_entrada
+FROM TIPOS_ENTRADAS te
+JOIN EVENTOS e ON e.id_evento = te.id_evento
+CROSS JOIN VENTAS_ENTRADAS ve
+JOIN COMPRADORES c ON c.id_comprador = ve.id_comprador
+CROSS JOIN ESTADOS_ENTRADAS ee
+WHERE te.nombre = 'ENTRADA GENERAL'
+  AND e.nombre = 'COMPLETADA PRO GATOS CALLEJEROS'
+  AND c.correo = 'vecino31@ejemplo.cl'
+  AND ee.nombre = 'UTILIZADA';
+INSERT INTO ENTRADAS (
+    ubicacion, qr, id_tipo_entrada, id_evento,
+    id_venta_entrada, id_estado_entrada
+)
+SELECT
+    'MESA 32', 'QR-GATOS-V0032',
+    te.id_tipo_entrada, e.id_evento,
+    ve.id_venta_entrada, ee.id_estado_entrada
+FROM TIPOS_ENTRADAS te
+JOIN EVENTOS e ON e.id_evento = te.id_evento
+CROSS JOIN VENTAS_ENTRADAS ve
+JOIN COMPRADORES c ON c.id_comprador = ve.id_comprador
+CROSS JOIN ESTADOS_ENTRADAS ee
+WHERE te.nombre = 'ENTRADA GENERAL'
+  AND e.nombre = 'COMPLETADA PRO GATOS CALLEJEROS'
+  AND c.correo = 'vecino32@ejemplo.cl'
+  AND ee.nombre = 'UTILIZADA';
+INSERT INTO ENTRADAS (
+    ubicacion, qr, id_tipo_entrada, id_evento,
+    id_venta_entrada, id_estado_entrada
+)
+SELECT
+    'MESA 33', 'QR-GATOS-V0033',
+    te.id_tipo_entrada, e.id_evento,
+    ve.id_venta_entrada, ee.id_estado_entrada
+FROM TIPOS_ENTRADAS te
+JOIN EVENTOS e ON e.id_evento = te.id_evento
+CROSS JOIN VENTAS_ENTRADAS ve
+JOIN COMPRADORES c ON c.id_comprador = ve.id_comprador
+CROSS JOIN ESTADOS_ENTRADAS ee
+WHERE te.nombre = 'ENTRADA GENERAL'
+  AND e.nombre = 'COMPLETADA PRO GATOS CALLEJEROS'
+  AND c.correo = 'vecino33@ejemplo.cl'
+  AND ee.nombre = 'UTILIZADA';
+INSERT INTO ENTRADAS (
+    ubicacion, qr, id_tipo_entrada, id_evento,
+    id_venta_entrada, id_estado_entrada
+)
+SELECT
+    'MESA 34', 'QR-GATOS-V0034',
+    te.id_tipo_entrada, e.id_evento,
+    ve.id_venta_entrada, ee.id_estado_entrada
+FROM TIPOS_ENTRADAS te
+JOIN EVENTOS e ON e.id_evento = te.id_evento
+CROSS JOIN VENTAS_ENTRADAS ve
+JOIN COMPRADORES c ON c.id_comprador = ve.id_comprador
+CROSS JOIN ESTADOS_ENTRADAS ee
+WHERE te.nombre = 'ENTRADA GENERAL'
+  AND e.nombre = 'COMPLETADA PRO GATOS CALLEJEROS'
+  AND c.correo = 'vecino34@ejemplo.cl'
+  AND ee.nombre = 'UTILIZADA';
+INSERT INTO ENTRADAS (
+    ubicacion, qr, id_tipo_entrada, id_evento,
+    id_venta_entrada, id_estado_entrada
+)
+SELECT
+    'MESA 35', 'QR-GATOS-V0035',
+    te.id_tipo_entrada, e.id_evento,
+    ve.id_venta_entrada, ee.id_estado_entrada
+FROM TIPOS_ENTRADAS te
+JOIN EVENTOS e ON e.id_evento = te.id_evento
+CROSS JOIN VENTAS_ENTRADAS ve
+JOIN COMPRADORES c ON c.id_comprador = ve.id_comprador
+CROSS JOIN ESTADOS_ENTRADAS ee
+WHERE te.nombre = 'ENTRADA GENERAL'
+  AND e.nombre = 'COMPLETADA PRO GATOS CALLEJEROS'
+  AND c.correo = 'vecino35@ejemplo.cl'
+  AND ee.nombre = 'UTILIZADA';
+INSERT INTO ENTRADAS (
+    ubicacion, qr, id_tipo_entrada, id_evento,
+    id_venta_entrada, id_estado_entrada
+)
+SELECT
+    'MESA 36', 'QR-GATOS-V0036',
+    te.id_tipo_entrada, e.id_evento,
+    ve.id_venta_entrada, ee.id_estado_entrada
+FROM TIPOS_ENTRADAS te
+JOIN EVENTOS e ON e.id_evento = te.id_evento
+CROSS JOIN VENTAS_ENTRADAS ve
+JOIN COMPRADORES c ON c.id_comprador = ve.id_comprador
+CROSS JOIN ESTADOS_ENTRADAS ee
+WHERE te.nombre = 'ENTRADA GENERAL'
+  AND e.nombre = 'COMPLETADA PRO GATOS CALLEJEROS'
+  AND c.correo = 'vecino36@ejemplo.cl'
+  AND ee.nombre = 'UTILIZADA';
+INSERT INTO ENTRADAS (
+    ubicacion, qr, id_tipo_entrada, id_evento,
+    id_venta_entrada, id_estado_entrada
+)
+SELECT
+    'MESA 37', 'QR-GATOS-V0037',
+    te.id_tipo_entrada, e.id_evento,
+    ve.id_venta_entrada, ee.id_estado_entrada
+FROM TIPOS_ENTRADAS te
+JOIN EVENTOS e ON e.id_evento = te.id_evento
+CROSS JOIN VENTAS_ENTRADAS ve
+JOIN COMPRADORES c ON c.id_comprador = ve.id_comprador
+CROSS JOIN ESTADOS_ENTRADAS ee
+WHERE te.nombre = 'ENTRADA GENERAL'
+  AND e.nombre = 'COMPLETADA PRO GATOS CALLEJEROS'
+  AND c.correo = 'vecino37@ejemplo.cl'
+  AND ee.nombre = 'UTILIZADA';
+INSERT INTO ENTRADAS (
+    ubicacion, qr, id_tipo_entrada, id_evento,
+    id_venta_entrada, id_estado_entrada
+)
+SELECT
+    'MESA 38', 'QR-GATOS-V0038',
+    te.id_tipo_entrada, e.id_evento,
+    ve.id_venta_entrada, ee.id_estado_entrada
+FROM TIPOS_ENTRADAS te
+JOIN EVENTOS e ON e.id_evento = te.id_evento
+CROSS JOIN VENTAS_ENTRADAS ve
+JOIN COMPRADORES c ON c.id_comprador = ve.id_comprador
+CROSS JOIN ESTADOS_ENTRADAS ee
+WHERE te.nombre = 'ENTRADA GENERAL'
+  AND e.nombre = 'COMPLETADA PRO GATOS CALLEJEROS'
+  AND c.correo = 'vecino38@ejemplo.cl'
+  AND ee.nombre = 'UTILIZADA';
+INSERT INTO ENTRADAS (
+    ubicacion, qr, id_tipo_entrada, id_evento,
+    id_venta_entrada, id_estado_entrada
+)
+SELECT
+    'MESA 39', 'QR-GATOS-V0039',
+    te.id_tipo_entrada, e.id_evento,
+    ve.id_venta_entrada, ee.id_estado_entrada
+FROM TIPOS_ENTRADAS te
+JOIN EVENTOS e ON e.id_evento = te.id_evento
+CROSS JOIN VENTAS_ENTRADAS ve
+JOIN COMPRADORES c ON c.id_comprador = ve.id_comprador
+CROSS JOIN ESTADOS_ENTRADAS ee
+WHERE te.nombre = 'ENTRADA GENERAL'
+  AND e.nombre = 'COMPLETADA PRO GATOS CALLEJEROS'
+  AND c.correo = 'vecino39@ejemplo.cl'
+  AND ee.nombre = 'UTILIZADA';
+INSERT INTO ENTRADAS (
+    ubicacion, qr, id_tipo_entrada, id_evento,
+    id_venta_entrada, id_estado_entrada
+)
+SELECT
+    'MESA 40', 'QR-GATOS-V0040',
+    te.id_tipo_entrada, e.id_evento,
+    ve.id_venta_entrada, ee.id_estado_entrada
+FROM TIPOS_ENTRADAS te
+JOIN EVENTOS e ON e.id_evento = te.id_evento
+CROSS JOIN VENTAS_ENTRADAS ve
+JOIN COMPRADORES c ON c.id_comprador = ve.id_comprador
+CROSS JOIN ESTADOS_ENTRADAS ee
+WHERE te.nombre = 'ENTRADA GENERAL'
+  AND e.nombre = 'COMPLETADA PRO GATOS CALLEJEROS'
+  AND c.correo = 'vecino40@ejemplo.cl'
+  AND ee.nombre = 'UTILIZADA';
+INSERT INTO ENTRADAS (
+    ubicacion, qr, id_tipo_entrada, id_evento,
+    id_venta_entrada, id_estado_entrada
+)
+SELECT
+    'MESA 41', 'QR-GATOS-V0041',
+    te.id_tipo_entrada, e.id_evento,
+    ve.id_venta_entrada, ee.id_estado_entrada
+FROM TIPOS_ENTRADAS te
+JOIN EVENTOS e ON e.id_evento = te.id_evento
+CROSS JOIN VENTAS_ENTRADAS ve
+JOIN COMPRADORES c ON c.id_comprador = ve.id_comprador
+CROSS JOIN ESTADOS_ENTRADAS ee
+WHERE te.nombre = 'ENTRADA SOLIDARIA'
+  AND e.nombre = 'COMPLETADA PRO GATOS CALLEJEROS'
+  AND c.correo = 'vecino41@ejemplo.cl'
+  AND ee.nombre = 'UTILIZADA';
+INSERT INTO ENTRADAS (
+    ubicacion, qr, id_tipo_entrada, id_evento,
+    id_venta_entrada, id_estado_entrada
+)
+SELECT
+    'MESA 42', 'QR-GATOS-V0042',
+    te.id_tipo_entrada, e.id_evento,
+    ve.id_venta_entrada, ee.id_estado_entrada
+FROM TIPOS_ENTRADAS te
+JOIN EVENTOS e ON e.id_evento = te.id_evento
+CROSS JOIN VENTAS_ENTRADAS ve
+JOIN COMPRADORES c ON c.id_comprador = ve.id_comprador
+CROSS JOIN ESTADOS_ENTRADAS ee
+WHERE te.nombre = 'ENTRADA SOLIDARIA'
+  AND e.nombre = 'COMPLETADA PRO GATOS CALLEJEROS'
+  AND c.correo = 'vecino42@ejemplo.cl'
+  AND ee.nombre = 'UTILIZADA';
+INSERT INTO ENTRADAS (
+    ubicacion, qr, id_tipo_entrada, id_evento,
+    id_venta_entrada, id_estado_entrada
+)
+SELECT
+    'MESA 43', 'QR-GATOS-V0043',
+    te.id_tipo_entrada, e.id_evento,
+    ve.id_venta_entrada, ee.id_estado_entrada
+FROM TIPOS_ENTRADAS te
+JOIN EVENTOS e ON e.id_evento = te.id_evento
+CROSS JOIN VENTAS_ENTRADAS ve
+JOIN COMPRADORES c ON c.id_comprador = ve.id_comprador
+CROSS JOIN ESTADOS_ENTRADAS ee
+WHERE te.nombre = 'ENTRADA SOLIDARIA'
+  AND e.nombre = 'COMPLETADA PRO GATOS CALLEJEROS'
+  AND c.correo = 'vecino43@ejemplo.cl'
+  AND ee.nombre = 'UTILIZADA';
+INSERT INTO ENTRADAS (
+    ubicacion, qr, id_tipo_entrada, id_evento,
+    id_venta_entrada, id_estado_entrada
+)
+SELECT
+    'MESA 44', 'QR-GATOS-V0044',
+    te.id_tipo_entrada, e.id_evento,
+    ve.id_venta_entrada, ee.id_estado_entrada
+FROM TIPOS_ENTRADAS te
+JOIN EVENTOS e ON e.id_evento = te.id_evento
+CROSS JOIN VENTAS_ENTRADAS ve
+JOIN COMPRADORES c ON c.id_comprador = ve.id_comprador
+CROSS JOIN ESTADOS_ENTRADAS ee
+WHERE te.nombre = 'ENTRADA SOLIDARIA'
+  AND e.nombre = 'COMPLETADA PRO GATOS CALLEJEROS'
+  AND c.correo = 'vecino44@ejemplo.cl'
+  AND ee.nombre = 'UTILIZADA';
+INSERT INTO ENTRADAS (
+    ubicacion, qr, id_tipo_entrada, id_evento,
+    id_venta_entrada, id_estado_entrada
+)
+SELECT
+    'MESA 45', 'QR-GATOS-V0045',
+    te.id_tipo_entrada, e.id_evento,
+    ve.id_venta_entrada, ee.id_estado_entrada
+FROM TIPOS_ENTRADAS te
+JOIN EVENTOS e ON e.id_evento = te.id_evento
+CROSS JOIN VENTAS_ENTRADAS ve
+JOIN COMPRADORES c ON c.id_comprador = ve.id_comprador
+CROSS JOIN ESTADOS_ENTRADAS ee
+WHERE te.nombre = 'ENTRADA SOLIDARIA'
+  AND e.nombre = 'COMPLETADA PRO GATOS CALLEJEROS'
+  AND c.correo = 'vecino45@ejemplo.cl'
+  AND ee.nombre = 'UTILIZADA';
+INSERT INTO ENTRADAS (
+    ubicacion, qr, id_tipo_entrada, id_evento,
+    id_venta_entrada, id_estado_entrada
+)
+SELECT
+    'MESA 46', 'QR-GATOS-V0046',
+    te.id_tipo_entrada, e.id_evento,
+    ve.id_venta_entrada, ee.id_estado_entrada
+FROM TIPOS_ENTRADAS te
+JOIN EVENTOS e ON e.id_evento = te.id_evento
+CROSS JOIN VENTAS_ENTRADAS ve
+JOIN COMPRADORES c ON c.id_comprador = ve.id_comprador
+CROSS JOIN ESTADOS_ENTRADAS ee
+WHERE te.nombre = 'ENTRADA SOLIDARIA'
+  AND e.nombre = 'COMPLETADA PRO GATOS CALLEJEROS'
+  AND c.correo = 'vecino46@ejemplo.cl'
+  AND ee.nombre = 'UTILIZADA';
+INSERT INTO ENTRADAS (
+    ubicacion, qr, id_tipo_entrada, id_evento,
+    id_venta_entrada, id_estado_entrada
+)
+SELECT
+    'MESA 47', 'QR-GATOS-V0047',
+    te.id_tipo_entrada, e.id_evento,
+    ve.id_venta_entrada, ee.id_estado_entrada
+FROM TIPOS_ENTRADAS te
+JOIN EVENTOS e ON e.id_evento = te.id_evento
+CROSS JOIN VENTAS_ENTRADAS ve
+JOIN COMPRADORES c ON c.id_comprador = ve.id_comprador
+CROSS JOIN ESTADOS_ENTRADAS ee
+WHERE te.nombre = 'ENTRADA SOLIDARIA'
+  AND e.nombre = 'COMPLETADA PRO GATOS CALLEJEROS'
+  AND c.correo = 'vecino47@ejemplo.cl'
+  AND ee.nombre = 'UTILIZADA';
+INSERT INTO ENTRADAS (
+    ubicacion, qr, id_tipo_entrada, id_evento,
+    id_venta_entrada, id_estado_entrada
+)
+SELECT
+    'MESA 48', 'QR-GATOS-V0048',
+    te.id_tipo_entrada, e.id_evento,
+    ve.id_venta_entrada, ee.id_estado_entrada
+FROM TIPOS_ENTRADAS te
+JOIN EVENTOS e ON e.id_evento = te.id_evento
+CROSS JOIN VENTAS_ENTRADAS ve
+JOIN COMPRADORES c ON c.id_comprador = ve.id_comprador
+CROSS JOIN ESTADOS_ENTRADAS ee
+WHERE te.nombre = 'ENTRADA SOLIDARIA'
+  AND e.nombre = 'COMPLETADA PRO GATOS CALLEJEROS'
+  AND c.correo = 'vecino48@ejemplo.cl'
+  AND ee.nombre = 'UTILIZADA';
+INSERT INTO ENTRADAS (
+    ubicacion, qr, id_tipo_entrada, id_evento,
+    id_venta_entrada, id_estado_entrada
+)
+SELECT
+    'MESA 49', 'QR-GATOS-V0049',
+    te.id_tipo_entrada, e.id_evento,
+    ve.id_venta_entrada, ee.id_estado_entrada
+FROM TIPOS_ENTRADAS te
+JOIN EVENTOS e ON e.id_evento = te.id_evento
+CROSS JOIN VENTAS_ENTRADAS ve
+JOIN COMPRADORES c ON c.id_comprador = ve.id_comprador
+CROSS JOIN ESTADOS_ENTRADAS ee
+WHERE te.nombre = 'ENTRADA SOLIDARIA'
+  AND e.nombre = 'COMPLETADA PRO GATOS CALLEJEROS'
+  AND c.correo = 'vecino49@ejemplo.cl'
+  AND ee.nombre = 'UTILIZADA';
+INSERT INTO ENTRADAS (
+    ubicacion, qr, id_tipo_entrada, id_evento,
+    id_venta_entrada, id_estado_entrada
+)
+SELECT
+    'MESA 50', 'QR-GATOS-V0050',
+    te.id_tipo_entrada, e.id_evento,
+    ve.id_venta_entrada, ee.id_estado_entrada
+FROM TIPOS_ENTRADAS te
+JOIN EVENTOS e ON e.id_evento = te.id_evento
+CROSS JOIN VENTAS_ENTRADAS ve
+JOIN COMPRADORES c ON c.id_comprador = ve.id_comprador
+CROSS JOIN ESTADOS_ENTRADAS ee
+WHERE te.nombre = 'ENTRADA SOLIDARIA'
+  AND e.nombre = 'COMPLETADA PRO GATOS CALLEJEROS'
+  AND c.correo = 'vecino50@ejemplo.cl'
+  AND ee.nombre = 'UTILIZADA';
 
-        INSERT INTO VENTAS_ENTRADAS (timestamp_venta, id_comprador)
-        VALUES (
-            TO_TIMESTAMP('2026-09-06 10:00:00', 'YYYY-MM-DD HH24:MI:SS')
-                + NUMTODSINTERVAL(i * 15, 'MINUTE'),
-            v_id_comprador
-        )
-        RETURNING id_venta_entrada INTO v_id_venta;
-
-        IF i <= 40 THEN
-            SELECT id_tipo_entrada
-              INTO v_id_tipo_entrada
-              FROM TIPOS_ENTRADAS
-             WHERE nombre = 'ENTRADA GENERAL'
-               AND id_evento = v_id_evento;
-        ELSE
-            SELECT id_tipo_entrada
-              INTO v_id_tipo_entrada
-              FROM TIPOS_ENTRADAS
-             WHERE nombre = 'ENTRADA SOLIDARIA'
-               AND id_evento = v_id_evento;
-        END IF;
-
-        INSERT INTO ENTRADAS (
-            ubicacion, qr, id_tipo_entrada, id_evento,
-            id_venta_entrada, id_estado_entrada
-        )
-        VALUES (
-            'MESA ' || LPAD(i, 2, '0'),
-            'QR-GATOS-V' || LPAD(i, 4, '0'),
-            v_id_tipo_entrada,
-            v_id_evento,
-            v_id_venta,
-            v_id_estado_entrada
-        );
-    END LOOP;
-END;
-/
 
 -- ============================================================
 -- 6. ENTRADAS DIGITALES
