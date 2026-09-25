@@ -22,7 +22,7 @@ Instalar entorno virtual, uv y dependencias:
 
 ```bash
 python -m venv .venv
-python -m pip install uv
 source .venv/bin/activate
+python -m pip install uv
 uv sync
 ```
