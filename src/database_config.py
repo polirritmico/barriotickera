@@ -11,5 +11,6 @@ class DatabaseConfig:
     service_name: str = os.getenv("DB_SERVICE", "FREEPDB1")
 
     @property
-    def data_source_name(self) -> str:
+    def dsn(self) -> str:
+        """Data Source Name"""
         return f"{self.host}:{self.port}/{self.service_name}"
