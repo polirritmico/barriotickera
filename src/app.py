@@ -12,6 +12,7 @@ from src.inputs_usuario import (
     pedir_texto,
     pedir_texto_opcional,
 )
+from src.modo_demo import ModoDemo
 
 AccionMenu = Callable[[], None]
 
@@ -102,7 +103,7 @@ class App:
             print("  Operación cancelada.")
 
     def accion_demo(self) -> None:
-        print("demo")
+        ModoDemo(self.dao).run()
 
     def accion_salir(self) -> None:
         print("Cerrando...")
