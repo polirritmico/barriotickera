@@ -1,19 +1,26 @@
-from oracledb import Connection, DatabaseError
+from oracledb import DB_TYPE_NUMBER, Connection, DatabaseError, DbType
 
 from src.entrada import Entrada, EntradaResolved
 from src.exceptions import EntradaError
 
 
 class EntradaDAO:
-    def __init__(self, conn: Connection):
+    def __init__(self, conn: Connection) -> None:
         self.conn = conn
 
     def _execute(
-        self, procedimiento: str, parametros: list[str | int | type]
+        self, procedimiento: str, parametros: list[str | int | None | DbType]
     ) -> list | tuple:
         try:
             with self.conn.cursor() as cur:
-                output: list | tuple = cur.callproc(procedimiento, parametros)
+                params_procesados = []
+                for p in parametros:
+                    if isinstance(p, (type, DbType)):
+                        params_procesados.append(cur.var(p))
+                    else:
+                        params_procesados.append(p)
+
+                output: list | tuple = cur.callproc(procedimiento, params_procesados)
             self.conn.commit()
             return output
 
@@ -63,10 +70,10 @@ class EntradaDAO:
                 entrada.id_evento,
                 entrada.id_venta_entrada,
                 entrada.id_estado_entrada,
-                int,  # pos 6 (0-idx)
+                DB_TYPE_NUMBER,  # pos 6 (0-idx)
             ],
         )
-        entrada.id_evento = output[6]
+        entrada.id = output[6]
         return output
 
     def actualizar(self, entrada: Entrada) -> None:

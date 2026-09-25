@@ -2,9 +2,15 @@ from collections.abc import Callable
 
 from oracledb import DatabaseError
 
-from src.entrada import EntradaResolved
+from src.entrada import Entrada, EntradaResolved
 from src.entrada_dao import EntradaDAO
 from src.exceptions import EntradaError
+from src.inputs_usuario import (
+    pedir_numero,
+    pedir_numero_opcional,
+    pedir_texto,
+    pedir_texto_opcional,
+)
 
 AccionMenu = Callable[[], None]
 
@@ -18,10 +24,12 @@ class App:
 4. Actualizar entrada
 5. Eliminar entrada
 6. Ejecutar demo automática
+
 0. Salir
 ============================================"""
 
-    opcion_salir = "0"
+    ESTADO_ENTRADA_DISPONIBLE = 1
+    OPCION_SALIR = "0"
 
     def __init__(self, dao: EntradaDAO) -> None:
         self.dao: EntradaDAO = dao
@@ -34,22 +42,6 @@ class App:
             "6": self.accion_demo,
             "0": self.accion_salir,
         }
-
-    def pedir(self, texto: str) -> str:
-        while True:
-            raw_text: str = input(f"  {texto}").strip()
-            print()
-            if raw_text:
-                return raw_text
-            print("    Campo obligatorio.")
-
-    def pedir_opcional(self, texto: str) -> None | str:
-        raw_text: str = input(f"  {texto}").strip()
-        print()
-        if raw_text:
-            return raw_text
-        else:
-            return None
 
     def _print_cabecera(self) -> None:
         print(
@@ -88,17 +80,27 @@ class App:
         self._print_entrada(entrada)
 
     def accion_listar(self) -> None:
-        filtro = self.pedir_opcional("Filtro por ubicación: ")
+        filtro = pedir_texto_opcional("-> Filtro por ubicación/qr (opcional)")
         res: list[EntradaResolved] = self.dao.listar(filtro)
         self.print_listado(res)
 
     def accion_buscar(self) -> None:
-        id = int(self.pedir("Id a buscar: "))
+        id = int(pedir_numero("Id a buscar"))
         res: EntradaResolved = self.dao.obtener(id)
         self.print_entrada(res)
 
     def accion_crear(self) -> None:
-        print("crear")
+        print("Creando una nueva entrada. Ingrese los datos requeridos.\n")
+        nueva_entrada = Entrada(
+            ubicacion=pedir_texto("Ubicación"),
+            qr=pedir_texto("Código QR"),
+            id_tipo_entrada=pedir_numero("ID tipo entrada"),
+            id_evento=pedir_numero("ID evento"),
+            id_venta_entrada=None,
+            id_estado_entrada=self.ESTADO_ENTRADA_DISPONIBLE,
+        )
+        self.dao.crear(nueva_entrada)
+        print(f"Nueva entrada registrada con id: {nueva_entrada.id}")
 
     def accion_actualizar(self) -> None:
         print("actualizar")
@@ -127,7 +129,7 @@ class App:
             try:
                 self.ejecutar_seleccion(seleccion_usuario)
 
-                if seleccion_usuario == self.opcion_salir:
+                if seleccion_usuario == self.OPCION_SALIR:
                     return
 
             except EntradaError as err:

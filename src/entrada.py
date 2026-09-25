@@ -8,7 +8,7 @@ class Entrada:
     qr: str
     id_tipo_entrada: int
     id_evento: int
-    id_venta_entrada: int
+    id_venta_entrada: int | None = None
     id_estado_entrada: int
     # tipo_entrada: str
     # evento: id
