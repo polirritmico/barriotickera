@@ -14,6 +14,10 @@
    - eliminar_entrada
    */
 
+-- Aplicar el script en el contenedor y esquema usado por la aplicación
+ALTER SESSION SET CONTAINER = FREEPDB1;
+ALTER SESSION SET CURRENT_SCHEMA = TICKETERA_APP;
+
 CREATE OR REPLACE PACKAGE pkg_entradas AS
 
 
