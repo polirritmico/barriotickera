@@ -1,6 +1,6 @@
 from oracledb import Connection, DatabaseError
 
-from src.entrada import Entrada
+from src.entrada import Entrada, EntradaResolved
 from src.exceptions import EntradaError
 
 
@@ -8,11 +8,14 @@ class EntradaDAO:
     def __init__(self, conn: Connection):
         self.conn = conn
 
-    def _execute(self, procedimiento: str, parametros: list[str | int]) -> None:
+    def _execute(
+        self, procedimiento: str, parametros: list[str | int | type]
+    ) -> list | tuple:
         try:
             with self.conn.cursor() as cur:
-                cur.callproc(procedimiento, parametros)
+                output: list | tuple = cur.callproc(procedimiento, parametros)
             self.conn.commit()
+            return output
 
         except DatabaseError as err:
             self.conn.rollback()
@@ -41,15 +44,36 @@ class EntradaDAO:
     #     with self.conn.cursor() as cur:
     #         return cur.callfunc("pkg_entrada.fn_existe", int, [run]) > 0
 
-    def listar(self, filtro: str | None = None) -> list[dict]:
-        return self._query("pkg_entrada.sp_listar_entrada", [filtro])
+    def listar(self, filtro: str | None = None) -> list[EntradaResolved]:
+        res: list[dict] = self._query("pkg_entrada.listar_entradas", [filtro])
+        return [EntradaResolved(**raw_entrada) for raw_entrada in res]
 
-    def obtener(self, id: int) -> dict:
-        # TODO: Implementar
-        return self._query("pkg_entrada.sp_listar_entrada", [id])[0]
+    def obtener(self, id: int) -> EntradaResolved:
+        res: list[dict] = self._query("pkg_entrada.obtener_entrada", [id])
+        entrada = EntradaResolved(**res[0])
+        return entrada
 
-    def crear(self, entrada: Entrada) -> None:
+    def crear(self, entrada: Entrada) -> list | tuple:
+        output: list | tuple = self._execute(
+            "pkg_entrada.crear_entrada",
+            [
+                entrada.ubicacion,
+                entrada.qr,
+                entrada.id_tipo_entrada,
+                entrada.id_evento,
+                entrada.id_venta_entrada,
+                entrada.id_estado_entrada,
+                int,  # pos 6 (0-idx)
+            ],
+        )
+        entrada.id_evento = output[6]
+        return output
+
+    def actualizar(self, entrada: Entrada) -> None:
         self._execute(
-            "pkg_entrada.sp_insertar_entrada",
+            "pkg_entrada.actualizar_entrada",
             list(vars(entrada).values()),
         )
+
+    def eliminar(self, id: int) -> None:
+        self._execute("pkg_entrada.eliminar_entrada", [id])
