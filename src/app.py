@@ -66,7 +66,11 @@ class App:
             id_estado_entrada=self.ESTADO_ENTRADA_DISPONIBLE,
         )
         self.dao.crear(nueva_entrada)
-        print(f"Nueva entrada registrada con id: {nueva_entrada.id}")
+        assert nueva_entrada.id, "Inesperado: La DB no registró id."
+        print(f"Nueva entrada registrada con id {nueva_entrada.id}:\n")
+
+        entrada_creada: EntradaResolved = self.dao.obtener(nueva_entrada.id)
+        print_entrada(entrada_creada)
 
     def accion_actualizar(self) -> None:
         actual: EntradaResolved = self.dao.obtener(
@@ -88,7 +92,11 @@ class App:
             or actual.id_estado_entrada,
         )
         self.dao.actualizar(nueva_entrada)
-        print("  ✔ Entrada actualizada correctamente.")
+        assert nueva_entrada.id, "Inesperado: La DB no registró id."
+        print("  ✅ Entrada actualizada correctamente:\n")
+
+        entrada_creada = self.dao.obtener(nueva_entrada.id)
+        print_entrada(entrada_creada)
 
     def accion_eliminar(self) -> None:
         id = pedir_numero("ID de la entrada a eliminar")
@@ -98,9 +106,9 @@ class App:
         msg = "\n  ¿Confirma la eliminación? (s/n): "
         if input(msg).strip().lower() == "s":
             self.dao.eliminar(id)
-            print("  ✔ Entrada eliminada.")
+            print("  ✅ Entrada eliminada correctamente.")
         else:
-            print("  Operación cancelada.")
+            print("  ⚠️ Operación cancelada.")
 
     def accion_demo(self) -> None:
         ModoDemo(self.dao).run()
