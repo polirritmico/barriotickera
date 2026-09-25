@@ -1,8 +1,14 @@
 # BarrioTickera
 
-## Setup
+## 1. Setup
 
-### Base de datos
+### 1.1 Requerimientos
+
+- Docker
+- Docker Compose
+- python >=3.14
+
+### 1.2 Base de datos
 
 Levantar contendor con compose:
 
@@ -10,13 +16,24 @@ Levantar contendor con compose:
 docker compose up
 ```
 
-Para bajar el contenedor y eliminar los volumenes/db:
+Cada vez que tenga que crearse/recrearse el volumen se van a aplicar
+automáticamente los scripts de configuración, ddl y poblado de tablas.
+
+Para bajar la BD:
+
+```bash
+docker compose down
+```
+
+#### Eliminar DB
+
+Para bajar el contenedor **y eliminar** los volumenes/db usar `-v`:
 
 ```bash
 docker compose down -v
 ```
 
-### Python
+### 1.3 Python
 
 Instalar entorno virtual, uv y dependencias:
 
@@ -26,3 +43,19 @@ source .venv/bin/activate
 python -m pip install uv
 uv sync
 ```
+
+## 2. Ejecutar
+
+Simplemente ejecutar:
+
+```bash
+uv run main.py
+```
+
+> [!IMPORTANT]
+>
+> No olvidar cargar el entorno virtual antes de ejecutar:
+>
+> ```bash
+> source .venv/bin/activate
+> ```
