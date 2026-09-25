@@ -18,7 +18,7 @@ class Database:
                 dsn=self.config.dsn,
             )
         except oracledb.DatabaseError as err:
-            print(f"Falló conexión con la base de datos:\n{err}")
+            print(f"Falló conexión con la base de datos:\n\n{err}")
             return None
 
         return self.conexion

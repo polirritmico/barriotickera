@@ -11,6 +11,7 @@ from src.modo_demo import ModoDemo
 def main():
     modo_demo = "--demo" in sys.argv
     print(f"=== BarrioTickera{"-DEMO" if modo_demo else ""} ===")
+
     db_config = DatabaseConfig()
     database = Database(db_config)
     if not database.connect():
