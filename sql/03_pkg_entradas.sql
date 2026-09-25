@@ -1,5 +1,5 @@
    /*
-   Códigos de error pkg_entradas:
+   Códigos de error pkg_entrada:
    -20001: QR duplicado
    -20002: QR obligatorio
    -20003: Referencia inexistente / FK inválida
@@ -11,6 +11,7 @@
    - crear_entrada
    - actualizar_entrada
    - listar_entradas (filtro opcional; NULL = todas)
+   - obtener_entrada
    - eliminar_entrada
    */
 
@@ -18,9 +19,7 @@
 ALTER SESSION SET CONTAINER = FREEPDB1;
 ALTER SESSION SET CURRENT_SCHEMA = TICKETERA_APP;
 
-CREATE OR REPLACE PACKAGE pkg_entradas AS
-
-
+CREATE OR REPLACE PACKAGE pkg_entrada AS
 
     PROCEDURE crear_entrada (
         p_ubicacion         IN  entradas.ubicacion%TYPE,
@@ -48,13 +47,18 @@ CREATE OR REPLACE PACKAGE pkg_entradas AS
         p_cursor OUT SYS_REFCURSOR
     );
 
+   PROCEDURE obtener_entrada (
+        p_id_entrada IN entradas.id_entrada%TYPE,
+        p_cursor OUT SYS_REFCURSOR
+    );
+
     -- D: Delete
     PROCEDURE eliminar_entrada (p_id_entrada IN entradas.id_entrada%TYPE);
 
-END pkg_entradas;
+END pkg_entrada;
 /
 
-CREATE OR REPLACE PACKAGE BODY pkg_entradas AS
+CREATE OR REPLACE PACKAGE BODY pkg_entrada AS
 
     e_fk_no_encontrada EXCEPTION;
     PRAGMA EXCEPTION_INIT(e_fk_no_encontrada, -2291);
@@ -187,7 +191,7 @@ CREATE OR REPLACE PACKAGE BODY pkg_entradas AS
         v_filtro VARCHAR2(200) := '%' || UPPER(TRIM(p_filtro)) || '%';
     BEGIN
         OPEN p_cursor FOR
-            SELECT e.id_entrada,
+            SELECT e.id_entrada AS id,
                    e.ubicacion,
                    e.qr,
                    e.id_tipo_entrada,
@@ -207,6 +211,39 @@ CREATE OR REPLACE PACKAGE BODY pkg_entradas AS
                 --OR UPPER(e.qr)        LIKE v_filtro
              ORDER BY e.id_entrada;
     END listar_entradas;
+
+    PROCEDURE obtener_entrada (
+        p_id_entrada IN entradas.id_entrada%TYPE,
+        p_cursor OUT SYS_REFCURSOR
+    ) AS
+        v_existe NUMBER;
+    BEGIN
+        SELECT COUNT(1)
+            INTO v_existe
+            FROM entradas
+        WHERE id_entrada = p_id_entrada;
+
+        IF v_existe = 0 THEN
+            RAISE_APPLICATION_ERROR(-20004, 'NO EXISTE UNA ENTRADA CON EL ID INDICADO');
+        END IF;
+
+        OPEN p_cursor FOR
+            SELECT e.id_entrada AS id,
+                   e.ubicacion,
+                   e.qr,
+                   e.id_tipo_entrada,
+                   t.nombre AS tipo_entrada,
+                   e.id_evento,
+                   ev.nombre AS evento,
+                   e.id_venta_entrada,
+                   e.id_estado_entrada,
+                   s.nombre AS estado_entrada
+              FROM entradas e
+              JOIN tipos_entradas   t  ON t.id_tipo_entrada   = e.id_tipo_entrada
+              JOIN eventos          ev ON ev.id_evento        = e.id_evento
+              JOIN estados_entradas s  ON s.id_estado_entrada = e.id_estado_entrada
+             WHERE e.id_entrada = p_id_entrada;
+    END obtener_entrada;
 
     PROCEDURE eliminar_entrada (p_id_entrada IN entradas.id_entrada%TYPE) IS
         v_existe   NUMBER;
@@ -235,6 +272,6 @@ CREATE OR REPLACE PACKAGE BODY pkg_entradas AS
                 ': tiene registros asociados');
     END eliminar_entrada;
 
-END pkg_entradas;
+END pkg_entrada;
 /
 
