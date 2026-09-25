@@ -117,7 +117,7 @@ CREATE OR REPLACE PACKAGE BODY pkg_entradas AS
                 END IF;
 
        END crear_entrada;
-    
+
     PROCEDURE actualizar_entrada(
         p_id_entrada        IN entradas.id_entrada%TYPE,
         p_ubicacion         IN  entradas.ubicacion%TYPE,
@@ -138,7 +138,7 @@ CREATE OR REPLACE PACKAGE BODY pkg_entradas AS
 
         UPDATE entradas
         SET ubicacion               = p_ubicacion,
-            qr                      = p_qr,     
+            qr                      = p_qr,
             id_tipo_entrada         = p_id_tipo_entrada,
             id_evento               = p_id_evento,
             id_venta_entrada        = p_id_venta_entrada,

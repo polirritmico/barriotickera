@@ -8,4 +8,8 @@ class Database:
         self.config = config
 
     def connect(self) -> oracledb.Connection:
-        pass
+        return oracledb.connect(
+            user=self.config.user,
+            password=self.config.password,
+            dsn=self.config.dsn,
+        )
