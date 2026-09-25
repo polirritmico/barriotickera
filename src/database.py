@@ -11,6 +11,7 @@ class Database:
 
     def connect(self) -> oracledb.Connection | None:
         try:
+            print("Conectando a la DB...")
             self.conexion = oracledb.connect(
                 user=self.config.user,
                 password=self.config.password,

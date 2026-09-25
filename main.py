@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-import os
 import sys
 
 from src.app import App
@@ -15,7 +14,7 @@ def main():
     db_config = DatabaseConfig()
     database = Database(db_config)
     if not database.connect():
-        os.exit(1)
+        sys.exit(1)
 
     with database.conexion:
         db_version = database.conexion.version
