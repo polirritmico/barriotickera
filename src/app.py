@@ -103,7 +103,26 @@ class App:
         print(f"Nueva entrada registrada con id: {nueva_entrada.id}")
 
     def accion_actualizar(self) -> None:
-        print("actualizar")
+        actual: EntradaResolved = self.dao.obtener(
+            pedir_numero("Ingrese ID de la entrada")
+        )
+        self.print_entrada(actual)
+
+        print("\nIngrese nuevos valores (<Enter> para conservar el actual): ")
+        nueva_entrada = Entrada(
+            id=actual.id,
+            ubicacion=pedir_texto_opcional("Ubicación") or actual.ubicacion,
+            qr=pedir_texto_opcional("QR") or actual.qr,
+            id_tipo_entrada=pedir_numero_opcional("ID tipo entrada")
+            or actual.id_tipo_entrada,
+            id_evento=pedir_numero_opcional("ID evento") or actual.id_evento,
+            id_venta_entrada=pedir_numero_opcional("ID venta entrada")
+            or actual.id_venta_entrada,
+            id_estado_entrada=pedir_numero_opcional("ID estado entrada")
+            or actual.id_estado_entrada,
+        )
+        self.dao.actualizar(nueva_entrada)
+        print("  ✔ Entrada actualizada correctamente.")
 
     def accion_eliminar(self) -> None:
         print("eliminar")

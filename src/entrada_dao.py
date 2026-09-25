@@ -76,10 +76,18 @@ class EntradaDAO:
         entrada.id = output[6]
         return output
 
-    def actualizar(self, entrada: Entrada) -> None:
+    def actualizar(self, entrada: Entrada | EntradaResolved) -> None:
         self._execute(
             "pkg_entrada.actualizar_entrada",
-            list(vars(entrada).values()),
+            [
+                entrada.id,
+                entrada.ubicacion,
+                entrada.qr,
+                entrada.id_tipo_entrada,
+                entrada.id_evento,
+                entrada.id_venta_entrada,
+                entrada.id_estado_entrada,
+            ],
         )
 
     def eliminar(self, id: int) -> None:

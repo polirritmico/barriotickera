@@ -17,7 +17,10 @@ def pedir_numero_opcional(texto: str) -> int | None:
         raw_text: str = input(f"{texto}: ").strip()
         print()
         try:
-            return int(raw_text)
+            if raw_text:
+                return int(raw_text)
+            else:
+                return None
         except Exception:
             msg = "No se puede procesar el valor ingresado. " "Intente nuevamente."
             print(msg)
