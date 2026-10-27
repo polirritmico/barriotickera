@@ -24,3 +24,9 @@ class EntradaResolved:
     id_venta_entrada: int | None
     id_estado_entrada: int
     estado_entrada: str
+
+@dataclass(frozen=True)
+class EntradaInput:
+    ubicacion: str
+    id_tipo_entrada: int
+    id_evento: int
