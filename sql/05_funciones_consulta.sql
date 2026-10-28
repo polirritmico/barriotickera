@@ -1,12 +1,15 @@
---- Funciones ---
+------------------------------------
+--- Funcion para contar entradas ---
+------------------------------------
+
 
 --- VARIABLES QUE RECIBE Y DEVUELVE ---
 CREATE OR REPLACE FUNCTION fn_cantidad_entradas (
-    p_id_evento IN entradas.id_eventos%TYPE,
-    p_estado    IN estados__entradas.nombre%TYPE DEFAULT NULL
+    p_id_evento IN entradas.id_evento%TYPE,
+    p_estado    IN estados_entradas.nombre%TYPE DEFAULT NULL
 ) RETURN NUMBER
 IS
-    v_id_estado estados_entradas_.id_estado_entrada%TYPE;
+    v_id_estado estados_entradas.id_estado_entrada%TYPE;
     v_cantidad  NUMBER;
 BEGIN
     -- VALIDACIÓN DE ARGUMENTOS
@@ -48,3 +51,51 @@ END fn_cantidad_entradas;
 /
 
 
+-----------------------------------------
+--- Funcion para calcular recaudación ---
+-----------------------------------------
+
+--- VARIABLES QUE RECIBE Y DEVUELVE ---
+CREATE OR REPLACE FUNCTION fn_recaudacion_evento(
+    p_id_evento IN entradas.id_evento%TYPE
+) RETURN NUMBER
+IS
+    v_recaudacion       NUMBER;
+    v_inconsistentes    NUMBER;
+BEGIN
+    -- Validación de argumentos
+    IF p_id_evento IS NULL THEN
+        RAISE_APPLICATION_ERROR(
+            -20010,
+            'DEBES INGRESAR ID DEL EVENTO'
+        );
+    END IF;
+
+    
+    SELECT NVL(SUM(t.valor), 0),
+        COUNT(
+            CASE
+                WHEN    e.id_venta_entrada IS NULL
+                OR      t.id_evento <> e.id_evento
+                THEN    1
+            END
+        )
+        INTO    v_recaudacion,
+                v_inconsistentes
+        FROM    entradas e
+        JOIN    tipos_entradas t
+        ON      t.id_tipo_entrada = e.id_tipo_entrada         
+        JOIN    estados_entradas es
+        ON      es.id_estado_entrada = e.id_estado_entrada
+        WHERE   e.id_evento = p_id_evento
+        AND     es.nombre IN ('VENDIDA', 'UTILIZADA');
+    IF v_inconsistentes > 0 THEN
+        RAISE_APPLICATION_ERROR(
+            -20012,
+            'HAY ENTRADAS SIN VENTA O CON  UN TIPO DE OTRO EVENTO'
+        );
+    END IF;
+    RETURN v_recaudacion;
+
+END fn_recaudacion_evento;
+/
