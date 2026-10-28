@@ -99,3 +99,28 @@ BEGIN
 
 END fn_recaudacion_evento;
 /
+
+
+-----------------------------------------------
+--- Funcion para calcular recaudación total ---
+--- de TODOS LOS EVENTOS                    ---
+-----------------------------------------------
+
+--- Esta función No recibe parametros
+
+CREATE OR REPLACE FUNCTION fn_recaudacion_total
+RETURN NUMBER
+IS
+    v_total NUMBER;
+BEGIN   
+    SELECT NVL(
+            SUM(FN_RECAUDACION_EVENTO(ev.id_evento)),
+            0
+        )
+        INTO    v_total
+        FROM    eventos ev;
+    RETURN v_total;
+END fn_recaudacion_total;
+/
+
+SHOW ERRORS FUNCTION fn_recaudacion_total;
