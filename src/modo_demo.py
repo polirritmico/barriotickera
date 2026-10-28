@@ -1,5 +1,7 @@
 from collections.abc import Callable
 
+from oracledb import DatabaseError
+
 from src.entrada import Entrada, EntradaResolved
 from src.entrada_dao import EntradaDAO
 from src.entrada_prints import print_entrada, print_listado
@@ -15,6 +17,14 @@ class ModoDemo:
         print(decoracion.format(titulo))
 
     def run(self) -> None:
+        try:
+            self.demo_script()
+        except EntradaError as err:
+            print(f"\n  ❌ {err}")
+        except DatabaseError as err:
+            print(f"\n  ❌ Error de base de datos: {err}")
+
+    def demo_script(self) -> None:
         self.print_header("1. CREATE")
 
         nueva_entrada = Entrada(
@@ -95,9 +105,9 @@ class ModoDemo:
             except EntradaError as err:
                 print(f"  {nombre}: {err}")
 
-            self.print_header("6. DELETE (eliminar)")
-            self.dao.eliminar(nueva_entrada.id)
-            try:
-                self.dao.obtener(nueva_entrada.id)
-            except EntradaError as err:
-                print(f"  Eliminado. Verificación: {err}")
+        self.print_header("6. DELETE (eliminar)")
+        self.dao.eliminar(nueva_entrada.id)
+        try:
+            self.dao.obtener(nueva_entrada.id)
+        except EntradaError as err:
+            print(f"  Eliminado. Verificación: {err}")
