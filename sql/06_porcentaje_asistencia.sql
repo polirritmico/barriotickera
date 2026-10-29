@@ -60,3 +60,38 @@ END fn_porcentaje_asistencia;
 /
 
 SHOW ERRORS FUNCTION fn_porcentaje_asistencia;
+
+
+--------------------------------------------------
+--- Funcion para calcular % de asistencia      ---
+--- juntando TODOS LOS EVENTOS                 ---
+--------------------------------------------------
+
+--- Esta función No recibe parametros
+CREATE OR REPLACE FUNCTION fn_porcentaje_asistencia_todos_eventos
+RETURN NUMBER
+IS
+    v_vendidas    NUMBER;   -- VENDIDA + UTILIZADA de todos los eventos
+    v_utilizadas  NUMBER;   -- solo UTILIZADA de todos los eventos
+BEGIN
+    -- CONTEO SIN FILTRAR POR EVENTO: SE JUNTAN TODOS
+    SELECT  COUNT(*),
+            COUNT(CASE WHEN es.nombre = 'UTILIZADA' THEN 1 END)
+    INTO    v_vendidas,
+            v_utilizadas
+    FROM    entradas e
+    JOIN    estados_entradas es
+    ON      es.id_estado_entrada = e.id_estado_entrada
+    WHERE   es.nombre IN ('VENDIDA', 'UTILIZADA');
+
+    -- SI NO SE VENDIO NADA NO SE PUEDE DIVIDIR POR CERO
+    IF v_vendidas = 0 THEN
+        RETURN 0;
+    END IF;
+
+    -- RETURN RESULTADO: UTILIZADAS / VENDIDAS * 100, CON 2 DECIMALES
+    RETURN ROUND(v_utilizadas * 100 / v_vendidas, 2);
+END fn_porcentaje_asistencia_todos_eventos;
+/
+
+SHOW ERRORS FUNCTION fn_porcentaje_asistencia_todos_eventos;
