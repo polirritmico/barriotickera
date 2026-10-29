@@ -1,3 +1,7 @@
+-- APLICAR SCRIPT EN EL CONTENEDOR Y ESQUEMA DEL APLICATIVO
+ALTER SESSION SET CONTAINER = FREEPDB1;
+ALTER SESSION SET CURRENT_SCHEMA = TICKETERA_APP;
+
 ------------------------------------
 --- Funcion para contar entradas ---
 ------------------------------------
