@@ -15,4 +15,4 @@ class EntradaError(Exception):
     @staticmethod
     def es_error_de_negocio(exception: DatabaseError) -> bool:
         (error,) = exception.args
-        return 20_000 <= error.code <= 20_999
+        return bool(20_000 <= error.code <= 20_999)
