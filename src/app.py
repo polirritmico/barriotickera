@@ -2,16 +2,14 @@ from collections.abc import Callable
 
 from oracledb import DatabaseError
 
-from src.entrada import Entrada, EntradaResolved
 from src.entrada_dao import EntradaDAO
-from src.entrada_prints import print_entrada, print_listado
-from src.exceptions import EntradaError
 from src.inputs_usuario import (
     pedir_numero,
     pedir_numero_opcional,
     pedir_texto,
     pedir_texto_opcional,
 )
+from src.models.entrada import Entrada, EntradaError, EntradaRaw
 from src.modo_demo import ModoDemo
 
 AccionMenu = Callable[[], None]
@@ -47,17 +45,17 @@ class App:
 
     def accion_listar(self) -> None:
         filtro = pedir_texto_opcional("-> Filtro por ubicación/qr (opcional)")
-        res: list[EntradaResolved] = self.dao.listar(filtro)
-        print_listado(res)
+        res: list[Entrada] = self.dao.listar(filtro)
+        Entrada.print_listado(res)
 
     def accion_buscar(self) -> None:
         id = int(pedir_numero("Id a buscar"))
-        res: EntradaResolved = self.dao.obtener(id)
-        print_entrada(res)
+        res: Entrada = self.dao.obtener(id)
+        print(res)
 
     def accion_crear(self) -> None:
         print("Creando una nueva entrada. Ingrese los datos requeridos.\n")
-        nueva_entrada = Entrada(
+        nueva_entrada = EntradaRaw(
             ubicacion=pedir_texto("Ubicación"),
             qr=pedir_texto("Código QR"),
             id_tipo_entrada=pedir_numero("ID tipo entrada"),
@@ -69,44 +67,52 @@ class App:
         assert nueva_entrada.id, "Inesperado: La DB no registró id."
         print(f"Nueva entrada registrada con id {nueva_entrada.id}:\n")
 
-        entrada_creada: EntradaResolved = self.dao.obtener(nueva_entrada.id)
-        print_entrada(entrada_creada)
+        entrada_creada: Entrada = self.dao.obtener(nueva_entrada.id)
+        print(entrada_creada)
 
     def accion_actualizar(self) -> None:
-        actual: EntradaResolved = self.dao.obtener(
-            pedir_numero("Ingrese ID de la entrada")
-        )
-        print_entrada(actual)
+        actual: Entrada = self.dao.obtener(pedir_numero("Ingrese ID de la entrada"))
+        print(actual)
 
         print("\nIngrese nuevos valores (<Enter> para conservar el actual): ")
-        nueva_entrada = Entrada(
-            id=actual.id,
-            ubicacion=pedir_texto_opcional("Ubicación") or actual.ubicacion,
-            qr=pedir_texto_opcional("QR") or actual.qr,
-            id_tipo_entrada=pedir_numero_opcional("ID tipo entrada")
-            or actual.id_tipo_entrada,
-            id_evento=pedir_numero_opcional("ID evento") or actual.id_evento,
-            id_venta_entrada=pedir_numero_opcional("ID venta entrada")
-            or actual.id_venta_entrada,
-            id_estado_entrada=pedir_numero_opcional("ID estado entrada")
-            or actual.id_estado_entrada,
+        ubicacion: str = pedir_texto_opcional("Ubicación") or actual.ubicacion
+        qr: str = pedir_texto_opcional("QR") or actual.qr
+        id_tipo_entrada = (
+            pedir_numero_opcional("ID tipo entrada") or actual.id_tipo_entrada
         )
+        id_evento: int = pedir_numero_opcional("ID evento") or actual.id_evento
+        id_venta_entrada: int | None = (
+            pedir_numero_opcional("ID venta entrada") or actual.id_venta_entrada
+        )
+        id_estado_entrada: int = (
+            pedir_numero_opcional("ID estado entrada") or actual.id_estado_entrada
+        )
+        nueva_entrada = EntradaRaw(
+            id=actual.id,
+            ubicacion=ubicacion,
+            qr=qr,
+            id_tipo_entrada=id_tipo_entrada,
+            id_evento=id_evento,
+            id_venta_entrada=id_venta_entrada,
+            id_estado_entrada=id_estado_entrada,
+        )
+
         self.dao.actualizar(nueva_entrada)
         assert nueva_entrada.id, "Inesperado: La DB no registró id."
-        print("  ✅ Entrada actualizada correctamente:\n")
+        print("  ✅ EntradaRaw actualizada correctamente:\n")
 
         entrada_creada = self.dao.obtener(nueva_entrada.id)
-        print_entrada(entrada_creada)
+        print(entrada_creada)
 
     def accion_eliminar(self) -> None:
         id = pedir_numero("ID de la entrada a eliminar")
-        entrada: EntradaResolved = self.dao.obtener(id)
-        print_entrada(entrada)
+        entrada: Entrada = self.dao.obtener(id)
+        print(entrada)
 
         msg = "\n  ¿Confirma la eliminación? (s/n): "
         if input(msg).strip().lower() == "s":
             self.dao.eliminar(id)
-            print("  ✅ Entrada eliminada correctamente.")
+            print("  ✅ EntradaRaw eliminada correctamente.")
         else:
             print("  ⚠️ Operación cancelada.")
 

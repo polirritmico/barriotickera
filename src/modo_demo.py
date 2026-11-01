@@ -2,10 +2,8 @@ from collections.abc import Callable
 
 from oracledb import DatabaseError
 
-from src.entrada import Entrada, EntradaResolved
 from src.entrada_dao import EntradaDAO
-from src.entrada_prints import print_entrada, print_listado
-from src.exceptions import EntradaError
+from src.models.entrada import Entrada, EntradaError, EntradaRaw
 
 
 class ModoDemo:
@@ -27,7 +25,7 @@ class ModoDemo:
     def demo_script(self) -> None:
         self.print_header("1. CREATE")
 
-        nueva_entrada = Entrada(
+        nueva_entrada = EntradaRaw(
             ubicacion="Sector Test",
             qr="QR-123456",
             id_tipo_entrada=1,
@@ -40,8 +38,8 @@ class ModoDemo:
         print(f"  Creada una nueva entrada con id {nueva_entrada.id} (asignado por BD)")
 
         self.print_header("2. READ (obtener)")
-        entrada_resuelta: EntradaResolved = self.dao.obtener(nueva_entrada.id)
-        print_entrada(entrada_resuelta)
+        entrada: Entrada = self.dao.obtener(nueva_entrada.id)
+        print(entrada)
 
         self.print_header("3. UPDATE (ubicacion y estado)")
         nueva_entrada.ubicacion = "Sector VIP DEMO"
@@ -50,15 +48,15 @@ class ModoDemo:
 
         filtro_sector = "Sector VIP DEMO"
         self.print_header(f"4. READ (listar con filtro '{filtro_sector}')")
-        resultados: list[EntradaResolved] = self.dao.listar(filtro_sector)
-        print_listado(resultados)
+        resultados: list[Entrada] = self.dao.listar(filtro_sector)
+        Entrada.print_listado(resultados)
 
         self.print_header("5. Errores de negocio controlados por el package")
         pruebas: list[tuple[str, Callable]] = [
             (
                 "QR duplicado",
                 lambda: self.dao.crear(
-                    Entrada(
+                    EntradaRaw(
                         ubicacion="Sector Test",
                         qr="QR-123456",
                         id_tipo_entrada=1,
@@ -71,7 +69,7 @@ class ModoDemo:
             (
                 "QR obligatorio",
                 lambda: self.dao.crear(
-                    Entrada(
+                    EntradaRaw(
                         ubicacion="Sector Test",
                         qr="   ",
                         id_tipo_entrada=1,
@@ -84,7 +82,7 @@ class ModoDemo:
             (
                 "Referencia inexistente",
                 lambda: self.dao.actualizar(
-                    Entrada(
+                    EntradaRaw(
                         id=nueva_entrada.id,
                         ubicacion="Sector VIP",
                         qr="QR-123456",
@@ -95,7 +93,7 @@ class ModoDemo:
                     )
                 ),
             ),
-            ("Entrada no encontrada", lambda: self.dao.obtener(999999)),
+            ("EntradaRaw no encontrada", lambda: self.dao.obtener(999999)),
         ]
 
         for nombre, accion in pruebas:

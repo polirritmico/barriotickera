@@ -1,7 +1,6 @@
 from oracledb import DB_TYPE_NUMBER, Connection, DatabaseError, DbType
 
-from src.entrada import Entrada, EntradaResolved
-from src.exceptions import EntradaError
+from src.models.entrada import Entrada, EntradaError, EntradaRaw
 
 
 class EntradaDAO:
@@ -51,16 +50,16 @@ class EntradaDAO:
     #     with self.conn.cursor() as cur:
     #         return cur.callfunc("pkg_entrada.fn_existe", int, [run]) > 0
 
-    def listar(self, filtro: str | None = None) -> list[EntradaResolved]:
+    def listar(self, filtro: str | None = None) -> list[Entrada]:
         res: list[dict] = self._query("pkg_entrada.listar_entradas", [filtro])
-        return [EntradaResolved(**raw_entrada) for raw_entrada in res]
+        return [Entrada(**raw_entrada) for raw_entrada in res]
 
-    def obtener(self, id: int) -> EntradaResolved:
+    def obtener(self, id: int) -> Entrada:
         res: list[dict] = self._query("pkg_entrada.obtener_entrada", [id])
-        entrada = EntradaResolved(**res[0])
+        entrada = Entrada(**res[0])
         return entrada
 
-    def crear(self, entrada: Entrada) -> list | tuple:
+    def crear(self, entrada: EntradaRaw) -> list | tuple:
         output: list | tuple = self._execute(
             "pkg_entrada.crear_entrada",
             [
@@ -76,7 +75,7 @@ class EntradaDAO:
         entrada.id = output[6]
         return output
 
-    def actualizar(self, entrada: Entrada | EntradaResolved) -> None:
+    def actualizar(self, entrada: EntradaRaw | Entrada) -> None:
         self._execute(
             "pkg_entrada.actualizar_entrada",
             [

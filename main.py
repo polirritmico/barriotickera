@@ -8,7 +8,7 @@ from src.entrada_dao import EntradaDAO
 from src.modo_demo import ModoDemo
 
 
-def main():
+def main() -> None:
     modo_demo = "--demo" in sys.argv
     print(f"=== BarrioTickera{"-DEMO" if modo_demo else ""} ===")
 
