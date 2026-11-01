@@ -1,6 +1,6 @@
 import oracledb
 
-from src.database_config import DatabaseConfig
+from .database_config import DatabaseConfig
 
 
 class Database:

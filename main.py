@@ -2,9 +2,7 @@
 import sys
 
 from src.app import App
-from src.database import Database
-from src.database_config import DatabaseConfig
-from src.entrada_dao import EntradaDAO
+from src.database import Database, DatabaseConfig, EntradaDAO
 from src.modo_demo import ModoDemo
 
 

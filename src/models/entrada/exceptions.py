@@ -1,4 +1,4 @@
-from oracledb import DatabaseError
+from src.database import DatabaseError
 
 
 class EntradaError(Exception):

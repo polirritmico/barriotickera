@@ -1,8 +1,6 @@
 from collections.abc import Callable
 
-from oracledb import DatabaseError
-
-from src.entrada_dao import EntradaDAO
+from src.database import DatabaseError, EntradaDAO
 from src.inputs_usuario import (
     pedir_numero,
     pedir_numero_opcional,
