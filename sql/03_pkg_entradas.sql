@@ -1,19 +1,21 @@
-   /*
-   Códigos de error pkg_entrada:
-   -20001: QR duplicado
-   -20002: QR obligatorio
-   -20003: Referencia inexistente / FK inválida
-   -20004: Entrada no encontrada
-   -20005: No se puede eliminar: tiene consumos asociados
-   -20999: Error inesperado
+/*
+# Códigos de error pkg_entrada:
 
-   Procedimientos:
-   - crear_entrada
-   - actualizar_entrada
-   - listar_entradas (filtro opcional; NULL = todas)
-   - obtener_entrada
-   - eliminar_entrada
-   */
+-20001: QR duplicado
+-20002: QR obligatorio
+-20003: Referencia inexistente / FK inválida
+-20004: Entrada no encontrada
+-20005: No se puede eliminar: tiene consumos asociados
+-20999: Error inesperado
+
+# Procedimientos:
+
+- crear_entrada
+- actualizar_entrada
+- listar_entradas (filtro opcional; NULL = todas)
+- obtener_entrada
+- eliminar_entrada
+*/
 
 -- Aplicar el script en el contenedor y esquema usado por la aplicación
 ALTER SESSION SET CONTAINER = FREEPDB1;
@@ -47,7 +49,7 @@ CREATE OR REPLACE PACKAGE pkg_entrada AS
         p_cursor OUT SYS_REFCURSOR
     );
 
-   PROCEDURE obtener_entrada (
+    PROCEDURE obtener_entrada (
         p_id_entrada IN entradas.id_entrada%TYPE,
         p_cursor OUT SYS_REFCURSOR
     );
