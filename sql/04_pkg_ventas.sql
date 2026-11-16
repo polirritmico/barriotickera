@@ -97,8 +97,25 @@ CREATE OR REPLACE PACKAGE pkg_venta AS
     -- ============================================================
 
     /*
-     * Recibe una lista de IDs de entradas y el evento.
-     * Retorna una lista con los IDs de las reservas generadas.
+     * ETAPA 1 - Reserva de entradas.
+     *
+     * Recibe una lista de IDs de entradas (p_ids_entradas) y el ID del evento
+     * (p_id_evento). Para cada entrada ejecuta la siguiente secuencia:
+     *
+     *   1. verificar_reserva(id_entrada):
+     *        - Si la entrada está en Reserva_Entradas y el timeout >= ahora,
+     *          se arroja el error -20101 (entrada reservada).
+     *        - Si la entrada está en Reserva_Entradas y el timeout ya pasó,
+     *          se ejecuta eliminar_reserva para liberarla.
+     *   2. verificar_disponibilidad(id_entrada):
+     *        - Si el estado de la entrada no es 'DISPONIBLE', se arroja el
+     *          error -20102 (entrada no disponible).
+     *   3. reservar_entrada(id_entrada):
+     *        - Agrega la entrada a Reserva_Entradas, cambia el estado a
+     *          'RESERVADA' y retorna el id_reserva_entradas.
+     *
+     * p_ids_reservas devuelve la lista con el ID de cada reserva generada,
+     * en el mismo orden que p_ids_entradas.
      */
     PROCEDURE reservar_entradas (
         p_ids_entradas      IN  t_lista_ids,
@@ -107,10 +124,36 @@ CREATE OR REPLACE PACKAGE pkg_venta AS
     );
 
     /*
-     * Toma la lista de IDs de reservas hechas previamente.
-     * Recibe el flag de éxito del pago.
-     * Recibe id_comprador si está logeado o correo si es invitado.
-     * Retorna el id de la venta generada si fue exitosa.
+     * ETAPA 2 - Compra de entradas.
+     *
+     * Toma la lista de IDs de reservas hechas previamente (p_ids_reservas) y
+     * el flag de éxito del pago (p_venta_exitosa). Recibe el id del comprador
+     * si está logueado (p_id_comprador) o su correo si es invitado
+     * (p_correo_comprador).
+     *
+     * Para cada reserva:
+     *   - Si el id_reserva no existe en Reserva_Entradas, se arroja el error
+     *     -20103 (reserva no válida o expirada). El frontend podría reintentar
+     *     automáticamente desde el principio al recibir este error.
+     *   - Si venta_exitosa = FALSE y no ha pasado el tiempo de reserva: no
+     *     pasa nada (la reserva se mantiene).
+     *   - Si venta_exitosa = FALSE y ha pasado el tiempo de reserva: se
+     *     ejecuta eliminar_reserva para cada entrada.
+     *
+     * Si venta_exitosa = TRUE:
+     *   - Se cambia el estado de las entradas a 'VENDIDA'.
+     *   - Se quitan de Reserva_Entradas.
+     *   - Se procesan los datos del comprador:
+     *        * Si se recibe un id_comprador válido, se utiliza directamente.
+     *        * Si solo se recibe el correo, se busca en la tabla Compradores:
+     *            - Si no existe, se guarda una nueva fila y se obtiene el
+     *              nuevo id_comprador.
+     *            - Si existe, se obtiene su id_comprador.
+     *   - Se guarda la venta en Ventas_Entradas con timestamp, id_comprador y
+     *     se actualiza el id_venta en cada entrada.
+     *
+     * p_id_venta_entrada retorna el ID de la venta generada (solo cuando
+     * venta_exitosa = TRUE).
      */
     PROCEDURE comprar_entradas(
         p_ids_reservas      IN  t_lista_ids,
@@ -121,24 +164,41 @@ CREATE OR REPLACE PACKAGE pkg_venta AS
     );
 
     /*
-     * Quita la entrada de Reserva_Entradas y la deja 'DISPONIBLE'.
+     * Quita la entrada de Reserva_Entradas y cambia su estado a 'DISPONIBLE'.
+     *
+     * Se utiliza para liberar reservas expiradas (verificar_reserva) o para
+     * cancelar reservas cuando la venta falla (comprar_entradas).
      */
     PROCEDURE eliminar_reserva(p_id_entrada IN entradas.id_entrada%TYPE);
 
     /*
-     * Revisa Reserva_Entradas. Arroja -20101 si está activa.
-     * Ejecuta eliminar_reserva si vence el tiempo de reserva.
+     * Revisa si la entrada existe en Reserva_Entradas.
+     *
+     *   - Si se encuentra y el timeout >= ahora (reserva activa), se arroja
+     *     el error -20101 (la entrada está reservada).
+     *   - Si se encuentra y el timeout está en el pasado (reserva expirada),
+     *     se ejecuta eliminar_reserva para liberar la entrada.
+     *
+     * Si la entrada no tiene reserva activa, no hace nada.
      */
     PROCEDURE verificar_reserva(p_id_entrada IN entradas.id_entrada%TYPE);
 
     /*
-     * Revisa estado en ENTRADAS. Arroja -20102 si no es 'DISPONIBLE'.
+     * Revisa el estado de la entrada en la tabla ENTRADAS.
+     *
+     * Si el estado no es 'DISPONIBLE', se arroja el error -20102
+     * (la entrada no está disponible).
      */
     PROCEDURE verificar_disponibilidad(p_id_entrada IN entradas.id_entrada%TYPE);
 
     /*
-     * Revisa la tabla puente Tipos_Entradas_Servicios y genera
-     * las filas correspondientes en Consumos_Entradas.
+     * ETAPA 3 - Generación de servicios asociados.
+     *
+     * Por cada entrada de p_ids_entradas, se revisa si su tipo tiene servicios
+     * asociados en la tabla puente Tipos_Entradas_Servicios.
+     *
+     * Si la entrada tiene servicios asociados, se genera, por cada uno de
+     * ellos, una fila en Consumos_Entradas con fecha_hora_canje en NULL.
      */
     PROCEDURE generar_servicios_entradas(
         p_ids_entradas IN t_lista_ids,
@@ -161,7 +221,10 @@ CREATE OR REPLACE PACKAGE BODY pkg_venta AS
     -- ============================================================
 
     /*
-     * Agrega a Reserva_Entradas y cambia estado a 'RESERVADA'.
+     * Función de uso interno para reservar_entradas.
+     *
+     * Agrega la entrada a Reserva_Entradas (con el tiempo de reserva y el
+     * evento asociados) y cambia el estado de la entrada a 'RESERVADA'.
      * Retorna el id_reserva_entradas generado.
      */
     FUNCTION reservar_entrada(
@@ -184,6 +247,17 @@ CREATE OR REPLACE PACKAGE BODY pkg_venta AS
         p_ids_reservas      OUT t_lista_ids
     ) IS
     BEGIN
+        -- ETAPA 1 - Reserva de entradas.
+        --
+        -- Recorre p_ids_entradas y, por cada entrada:
+        --   1. Llama a verificar_reserva(id_entrada):
+        --        - Lanza -20101 si la reserva está activa (timeout >= ahora).
+        --        - Llama a eliminar_reserva si la reserva expiró.
+        --   2. Llama a verificar_disponibilidad(id_entrada):
+        --        - Lanza -20102 si el estado no es 'DISPONIBLE'.
+        --   3. Llama a reservar_entrada(id_entrada) para crear la reserva,
+        --        cambiar el estado a 'RESERVADA' y obtener el id_reserva.
+        -- Almacena cada id_reserva_entradas generado en p_ids_reservas.
         -- TODO: Implementar
         NULL;
     END reservar_entradas;
@@ -197,6 +271,29 @@ CREATE OR REPLACE PACKAGE BODY pkg_venta AS
         p_id_venta_entrada  OUT ventas_entradas.id_venta_entrada%TYPE
     ) IS
     BEGIN
+        -- ETAPA 2 - Compra de entradas.
+        --
+        -- Recorre p_ids_reservas y, por cada reserva:
+        --   - Si el id_reserva no existe en Reserva_Entradas:
+        --        lanza error -20103 (reserva no válida o expirada).
+        --   - Si venta_exitosa = FALSE y no venció el tiempo de reserva:
+        --        no pasa nada (se mantiene la reserva).
+        --   - Si venta_exitosa = FALSE y venció el tiempo de reserva:
+        --        ejecuta eliminar_reserva para liberar la entrada.
+        --
+        -- Si venta_exitosa = TRUE:
+        --   - Cambia el estado de las entradas a 'VENDIDA'.
+        --   - Las quita de Reserva_Entradas.
+        --   - Procesa los datos del comprador:
+        --        * Si p_id_comprador es válido, se usa directamente.
+        --        * Si solo se recibe p_correo_comprador, se busca en
+        --          Compradores:
+        --            - Si no existe, se inserta y se obtiene el nuevo
+        --              id_comprador.
+        --            - Si existe, se obtiene su id_comprador.
+        --   - Guarda la venta en Ventas_Entradas con timestamp,
+        --     id_comprador y actualiza el id_venta en cada entrada.
+        --   - Asigna p_id_venta_entrada con el id de la venta generada.
         -- TODO: Implementar
         NULL;
     END comprar_entradas;
@@ -204,6 +301,8 @@ CREATE OR REPLACE PACKAGE BODY pkg_venta AS
 
     PROCEDURE eliminar_reserva(p_id_entrada IN entradas.id_entrada%TYPE) IS
     BEGIN
+        -- Quita la entrada de Reserva_Entradas y cambia su estado a
+        -- 'DISPONIBLE'. Se usa para liberar reservas expiradas o canceladas.
         -- TODO: Implementar
         NULL;
     END eliminar_reserva;
@@ -211,6 +310,12 @@ CREATE OR REPLACE PACKAGE BODY pkg_venta AS
 
     PROCEDURE verificar_reserva(p_id_entrada IN entradas.id_entrada%TYPE) IS
     BEGIN
+        -- Revisa si la entrada existe en Reserva_Entradas:
+        --   - Si se encuentra y el timeout >= ahora (reserva activa):
+        --        lanza error -20101 (la entrada está reservada).
+        --   - Si se encuentra y el timeout está en el pasado (expirada):
+        --        ejecuta eliminar_reserva para liberar la entrada.
+        -- Si no tiene reserva activa, no hace nada.
         -- TODO: Implementar
         NULL;
     END verificar_reserva;
@@ -218,6 +323,9 @@ CREATE OR REPLACE PACKAGE BODY pkg_venta AS
 
     PROCEDURE verificar_disponibilidad(p_id_entrada IN entradas.id_entrada%TYPE) IS
     BEGIN
+        -- Revisa el estado de la entrada en la tabla ENTRADAS.
+        -- Si el estado no es 'DISPONIBLE', lanza error -20102
+        -- (la entrada no está disponible).
         -- TODO: Implementar
         NULL;
     END verificar_disponibilidad;
@@ -228,6 +336,13 @@ CREATE OR REPLACE PACKAGE BODY pkg_venta AS
         p_id_evento    IN eventos.id_evento%TYPE
     ) IS
     BEGIN
+        -- ETAPA 3 - Generación de servicios asociados.
+        --
+        -- Por cada entrada de p_ids_entradas:
+        --   - Revisa si su tipo tiene servicios asociados en la tabla puente
+        --     Tipos_Entradas_Servicios.
+        --   - Si tiene servicios asociados, genera por cada uno una fila en
+        --     Consumos_Entradas con fecha_hora_canje en NULL.
         -- TODO: Implementar
         NULL;
     END generar_servicios_entradas;
